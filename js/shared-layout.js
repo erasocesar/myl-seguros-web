@@ -48,7 +48,7 @@
   function buildFooter() {
     return '<footer><div class="footer-main">'
       + '<div>'
-      + '<img src="/Logo_Leon_V2_transparente.png" alt="M&amp;L Seguros" class="footer-logo">'
+      + '<a href="/"><img src="/Logo_Leon_V2_transparente.png" alt="M&amp;L Seguros" class="footer-logo"></a>'
       + '<p class="footer-info">Consultores de Seguros &middot; Bogot&aacute;, Colombia<br>NIT: 901331365-1</p>'
       + '<div class="social-icons">'
       + '<a href="https://www.facebook.com/people/Isagis-Technologies/61576177173753/" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener">' + svgFb() + '</a>'
