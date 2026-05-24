@@ -68,7 +68,10 @@
       text-align: center;
       transition: all .2s;
       background: var(--bg-primary);
-      cursor: default;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      color: inherit;
     }
     .carrier-card:hover {
       border-color: rgba(194,24,91,.3);
@@ -264,7 +267,8 @@
 <div class="aliadas-body">
 
   <div class="section-eyebrow">PORTAFOLIO COMPLETO</div>
-  <h2 class="section-title">Aliadas que respaldan tu tranquilidad</h2>
+  <h2 class="section-title">Aseguradoras aliadas</h2>
+  <p style="color:var(--text-secondary);max-width:600px;margin:-24px 0 40px;font-size:16px;line-height:1.6">Trabajamos con las principales aseguradoras del mercado colombiano para ofrecerte múltiples opciones según tu necesidad.</p>
 
   <!-- Carriers grid (populated by JS) -->
   <div class="carriers-grid" id="carriersGrid">
@@ -274,6 +278,13 @@
     <div class="skeleton-card" style="height:160px"></div>
     <div class="skeleton-card" style="height:160px"></div>
     <div class="skeleton-card" style="height:160px"></div>
+  </div>
+
+  <!-- CTA section -->
+  <div style="background:var(--color-accent);border-radius:var(--radius-lg);padding:48px 40px;text-align:center;margin-bottom:32px">
+    <h2 style="font-size:clamp(20px,2.5vw,28px);font-weight:800;color:#fff;margin:0 0 12px">¿No sabes cuál elegir?</h2>
+    <p style="color:rgba(255,255,255,.82);max-width:460px;margin:0 auto 28px;font-size:15px">Te ayudamos a comparar opciones y encontrar la póliza adecuada.</p>
+    <a href="/comparar/" class="btn-primary" style="background:#fff;color:var(--color-accent);border-color:#fff;font-size:15px;padding:12px 28px">Comparar pólizas</a>
   </div>
 
   <!-- Trust section -->
@@ -390,6 +401,32 @@
 <script src="../js/gobernanza-data.js"></script>
 <script src="../js/mili-chat.js"></script>
 <script>
+const CARRIER_URLS = {
+  'SURA':                 'https://www.segurossura.com.co/',
+  'Seguros Bolívar':      'https://www.segurosbolivar.com/',
+  'MAPFRE':               'https://www.mapfre.com.co/',
+  'AXA Colpatria':        'https://www.axacolpatria.co/',
+  'Equidad Seguros':      'https://www.laequidadseguros.coop/',
+  'La Equidad':           'https://www.laequidadseguros.coop/',
+  'Seguros del Estado':   'https://www.segurosdelestado.com.co/',
+  'Mundial de Seguros':   'https://www.mundialseguros.com.co/',
+  'La Previsora':         'https://www.laprevisora.com.co/',
+  'Qualitas':             'https://www.qualitas.com.co/',
+  'HDI Seguros':                    'https://www.hdi.com.co/',
+  'HDI':                            'https://www.hdi.com.co/',
+  'HDI Colombia':                   'https://www.hdi.com.co/',
+  'Finesa':                         'https://www.finesa.com.co/',
+  'Bancolombia':                    'https://www.bancolombia.com/',
+  'Banco de Bogotá':                'https://www.bancodebogota.com/',
+  'Banco de Occidente':             'https://www.bancodeoccidente.com.co/',
+  'Previsora Seguros':              'https://www.laprevisora.com.co/',
+  'Qualitas Colombia':              'https://www.qualitas.com.co/',
+  'SURA (Banco de Bogotá)':        'https://www.segurossura.com.co/',
+  'SURA (Banco de Occidente)':     'https://www.segurossura.com.co/',
+  'SURA (Bancolombia / Celsia)':   'https://www.segurossura.com.co/',
+  'SURA (Finesa)':                 'https://www.segurossura.com.co/',
+};
+
 async function loadAliadas() {
   try {
     const [carriers, products] = await Promise.all([
@@ -397,30 +434,43 @@ async function loadAliadas() {
       window.sheetsClient.getProducts({ is_active: '1' })
     ]);
 
-    const activeCarriers = carriers.filter(c => c.is_active === '1' || c.is_active === 1 || !c.is_active);
-
-    // Build map of carrier → categories used
+    // Build enriched carrier map from Products (always populated)
     const carrierMeta = {};
     products.forEach(p => {
+      if (!p.carrier_name) return;
       if (!carrierMeta[p.carrier_name]) {
-        carrierMeta[p.carrier_name] = { count: 0, cats: new Set() };
+        carrierMeta[p.carrier_name] = { count: 0, cats: new Set(), logo_filename: p.logo_filename || '' };
       }
       carrierMeta[p.carrier_name].count++;
       if (p.menu_category) carrierMeta[p.carrier_name].cats.add(p.menu_category.toUpperCase());
     });
 
+    // Use Carriers sheet if populated; otherwise derive list from Products
+    const sheetCarriers = carriers.filter(c => c.is_active === '1' || c.is_active === 1 || !c.is_active);
+    const carriersToShow = sheetCarriers.length > 0
+      ? sheetCarriers
+      : Object.keys(carrierMeta).sort().map(name => ({
+          carrier_name: name,
+          logo_filename: carrierMeta[name].logo_filename,
+          website_url: ''
+        }));
+
     // Update hero stats
-    document.getElementById('statCarriers').textContent = activeCarriers.length;
+    document.getElementById('statCarriers').textContent = carriersToShow.length;
     document.getElementById('statProducts').textContent = products.length;
 
     // Render grid
     const grid = document.getElementById('carriersGrid');
-    grid.innerHTML = activeCarriers.map(c => {
-      const meta = carrierMeta[c.carrier_name] || { count: 0, cats: new Set() };
-      const logoSrc = c.logo_filename ? `../logos/${c.logo_filename}` : '';
+    grid.innerHTML = carriersToShow.map(c => {
+      const meta = carrierMeta[c.carrier_name] || { count: 0, cats: new Set(), logo_filename: c.logo_filename || '' };
+      const rawLogo = (c.logo_filename || meta.logo_filename || '').replace(/^logos[\\/]/i, '');
+      const logoSrc = rawLogo ? `../logos/${rawLogo}` : '';
       const cats = [...meta.cats];
+      const url = c.website_url || CARRIER_URLS[c.carrier_name] || '';
+      const tag = url ? 'a' : 'div';
+      const linkAttrs = url ? `href="${url}" target="_blank" rel="noopener"` : '';
       return `
-        <div class="carrier-card scroll-reveal">
+        <${tag} class="carrier-card scroll-reveal" ${linkAttrs}>
           <div class="carrier-logo-wrap">
             ${logoSrc
               ? `<img src="${logoSrc}" alt="${c.carrier_name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
@@ -432,7 +482,7 @@ async function loadAliadas() {
           <div class="carrier-name">${c.carrier_name}</div>
           ${meta.count > 0 ? `<div class="carrier-products-count">${meta.count} producto${meta.count !== 1 ? 's' : ''}</div>` : ''}
           ${cats.length ? `<div class="carrier-categories">${cats.map(cat => `<span class="cat-badge cat-${cat}">${cat}</span>`).join('')}</div>` : ''}
-        </div>`;
+        </${tag}>`;
     }).join('');
 
     // Trigger scroll reveal
