@@ -466,7 +466,9 @@ function setProductType(btn) {
 function renderSubcatBar() {
   const bar = document.getElementById('filterBarSubcat');
   if (currentFilter === 'TODOS') { bar.style.display = 'none'; return; }
-  const subcats = SUBCATEGORY_MAP.filter(s => s.category === currentFilter);
+  if (typeof SUBCATEGORY_MAP === 'undefined') { bar.style.display = 'none'; return; }
+  const cat = currentFilter.toUpperCase();
+  const subcats = SUBCATEGORY_MAP.filter(s => (s.category || '').toUpperCase() === cat);
   bar.innerHTML = '<span class="filter-label">Subcategoría:</span>'
     + '<button class="filter-btn active" data-subcat="TODAS" onclick="setSubcat(this)">Todas</button>'
     + subcats.map(s =>
