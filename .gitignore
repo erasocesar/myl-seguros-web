@@ -1,0 +1,15 @@
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+temp/
+tmp/
+playwright-report/
+test-results/
+qa-screenshots/
+qa-screenshots-full/
+.claude/
+uploads/
+*.mp4
+*_BACKUP_*.js
+Scripts/clausulado-*

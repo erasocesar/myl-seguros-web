@@ -1,0 +1,2680 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consultores M&L Seguros — Tu tranquilidad respaldada por +10 aseguradoras aliadas</title>
+  
+  <!-- Google Fonts: Inter (primary) + Lora (quotes) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@1,400&display=swap" rel="stylesheet">
+  
+  <!-- Design System CSS -->
+  <link rel="stylesheet" href="colors_and_type.css">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: var(--font-sans);
+      color: var(--text-primary);
+      background: var(--bg-primary);
+      overflow-x: hidden;
+    }
+    
+    /* Container */
+    .container {
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+      padding: 0 var(--section-padding-x);
+    }
+    
+    /* Navigation */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #1A1A2E;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      transition: box-shadow 0.25s ease;
+    }
+    
+    nav.scrolled {
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+    
+    .nav-logo {
+      height: 52px;
+      width: auto;
+      margin-left: 16px;
+      object-fit: contain;
+    }
+    
+    .nav-menu {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    
+    .nav-menu li {
+      position: relative;
+    }
+    
+    .nav-menu li.has-dropdown > a {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .nav-menu li.has-dropdown > a svg {
+      transition: transform 0.2s ease;
+    }
+    
+    .nav-menu li.has-dropdown:hover > a svg {
+      transform: rotate(180deg);
+    }
+    
+    .nav-menu li.has-dropdown:hover > a {
+      color: #C2185B;
+    }
+    
+    .nav-menu a {
+      color: rgba(255, 255, 255, 0.75);
+      text-decoration: none;
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-medium);
+      transition: color 0.2s ease;
+      position: relative;
+    }
+    
+    .nav-menu a:hover {
+      color: #E91E8C;
+    }
+    
+    .nav-menu a.active {
+      color: #FFFFFF;
+    }
+    
+    .nav-menu a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #E91E8C;
+    }
+    
+    /* Mega Menu */
+    .mega-menu {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-top: 16px;
+      background: #FFFFFF;
+      border-top: 3px solid #C2185B;
+      border-radius: 0 0 16px 16px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+      padding: 32px 40px;
+      width: 280px;
+      max-width: 90vw;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(-50%) translateY(-8px);
+      transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+      z-index: 1000;
+    }
+    
+    .nav-menu li.has-dropdown:hover .mega-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+    
+    .mega-menu-column {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    
+    .mega-menu-title {
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 13px;
+      color: #1A1A2E;
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+      padding: 12px 0;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+    
+    .mega-menu-title:hover {
+      color: #C2185B;
+    }
+    
+    .mega-menu-column a {
+      font-family: var(--font-sans);
+      font-weight: 400;
+      font-size: 13px;
+      color: #4A4A4A;
+      text-decoration: none;
+      padding: 3px 0;
+      display: block;
+      transition: color 0.2s ease;
+    }
+    
+    .mega-menu-column a:hover {
+      color: #C2185B;
+    }
+    
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .badge-ai {
+      background: rgba(194, 24, 91, 0.12);
+      border: 1px solid rgba(194, 24, 91, 0.35);
+      color: #FFFFFF;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    
+    .badge-ai:hover {
+      background: rgba(194, 24, 91, 0.25);
+    }
+    
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: #22C55E;
+      border-radius: 50%;
+      animation: pulseGreen 2s ease infinite;
+    }
+    
+    @keyframes pulseGreen {
+      0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(34,197,94,0.4); 
+      }
+      50% { 
+        box-shadow: 0 0 0 6px rgba(34,197,94,0); 
+      }
+    }
+    
+    @keyframes pulseRing {
+      0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(233, 30, 140, 0.4);
+      }
+      50% { 
+        box-shadow: 0 0 0 6px rgba(233, 30, 140, 0);
+      }
+    }
+    
+    .btn-primary {
+      background: var(--color-accent);
+      color: var(--text-on-accent);
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      font-weight: var(--font-weight-semibold);
+      font-size: var(--font-size-base);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .btn-primary:hover {
+      background: var(--color-accent-hover);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      color: var(--color-accent);
+      border: 1.5px solid var(--color-accent);
+      padding: 11px 24px;
+      border-radius: var(--radius-sm);
+      font-weight: var(--font-weight-semibold);
+      font-size: var(--font-size-base);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(194, 24, 91, 0.06);
+    }
+    
+    .btn-whatsapp {
+      background: var(--color-success);
+      color: white;
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      font-weight: var(--font-weight-semibold);
+      font-size: var(--font-size-base);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .btn-whatsapp:hover {
+      background: #1ebe58;
+      transform: translateY(-1px);
+    }
+    
+    /* Hero Section */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-primary);
+      min-height: 520px;
+      padding: 64px 0 56px;
+    }
+    
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      z-index: 0;
+    }
+    
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.92) 0%,
+        rgba(255, 255, 255, 0.80) 30%,
+        rgba(255, 255, 255, 0.30) 55%,
+        rgba(255, 255, 255, 0.0) 100%
+      );
+      z-index: 1;
+    }
+    
+    .hero .container {
+      position: relative;
+      z-index: 2;
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+      padding: 0 var(--section-padding-x);
+    }
+    
+    .hero-content {
+      position: relative;
+      width: 50%;
+      max-width: 600px;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    
+    .hero-badge {
+      background: rgba(194, 24, 91, 0.08);
+      border: 1px solid rgba(194, 24, 91, 0.20);
+      color: #8a0f3f;
+      padding: 10px 18px;
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      opacity: 0;
+      animation: badgePop 0.5s ease 0.1s forwards;
+    }
+    
+    @keyframes badgePop {
+      0% {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    .hero-title {
+      font-size: 52px;
+      font-weight: var(--font-weight-extrabold);
+      line-height: var(--line-height-tight);
+      color: var(--color-dark);
+      letter-spacing: var(--letter-spacing-tight);
+      opacity: 0;
+      animation: fadeUp 0.55s ease 0.15s forwards;
+    }
+    
+    .hero-title .accent {
+      color: var(--color-accent);
+    }
+    
+    @keyframes fadeUp {
+      0% {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .hero-subtitle {
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--text-primary);
+      opacity: 0;
+      animation: fadeUp 0.55s ease 0.30s forwards;
+    }
+    
+    .hero-subtitle strong {
+      color: var(--color-dark);
+      font-weight: var(--font-weight-semibold);
+    }
+    
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      opacity: 0;
+      animation: fadeUp 0.55s ease 0.42s forwards;
+    }
+    
+    .hero-social-proof {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      opacity: 0;
+      animation: fadeUp 0.55s ease 0.55s forwards;
+    }
+    
+    .avatar-stack {
+      display: flex;
+    }
+    
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid white;
+      margin-left: -12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: var(--font-weight-bold);
+      font-size: 12px;
+      color: white;
+    }
+    
+    .avatar:first-child {
+      margin-left: 0;
+    }
+    
+    .stars {
+      display: flex;
+      gap: 2px;
+      color: var(--color-gold);
+    }
+    
+    .star {
+      opacity: 0;
+      animation: starPop 0.3s ease forwards;
+    }
+    
+    .star:nth-child(1) { animation-delay: 0.6s; }
+    .star:nth-child(2) { animation-delay: 0.7s; }
+    .star:nth-child(3) { animation-delay: 0.8s; }
+    .star:nth-child(4) { animation-delay: 0.9s; }
+    .star:nth-child(5) { animation-delay: 1.0s; }
+    
+    @keyframes starPop {
+      0% {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      50% {
+        transform: scale(1.2);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    .social-proof-text {
+      font-size: 13px;
+      color: var(--text-primary);
+    }
+    
+    .hero-image-wrapper {
+      position: relative;
+      animation: floatY 5s ease-in-out infinite;
+    }
+    
+    @keyframes floatY {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    
+    .hero-image {
+      width: 460px;
+      height: 500px;
+      border-radius: 20px;
+      object-fit: cover;
+      box-shadow: 0 20px 60px rgba(194, 24, 91, 0.15), 0 8px 24px rgba(0, 0, 0, 0.10);
+    }
+    
+    .floating-card {
+      position: absolute;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0;
+      animation: badgePop 0.5s ease forwards;
+    }
+    
+    .floating-card:first-of-type {
+      top: 20px;
+      right: -20px;
+      animation-delay: 0.7s;
+    }
+    
+    .floating-card:last-of-type {
+      bottom: 40px;
+      left: -20px;
+      animation-delay: 0.9s;
+    }
+    
+    .floating-card-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    
+    .floating-card-content {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .floating-card-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-weight: var(--font-weight-medium);
+    }
+    
+    .floating-card-value {
+      font-size: 18px;
+      font-weight: var(--font-weight-bold);
+      color: var(--color-dark);
+    }
+    
+    /* About Us Section */
+    .about-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    
+    .about-content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s ease-out 0.1s, transform 0.5s ease-out 0.1s;
+    }
+    
+    .scroll-reveal.visible .about-content {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .about-label {
+      color: var(--color-accent);
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 22px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    
+    .about-title {
+      font-family: var(--font-sans);
+      font-weight: var(--font-weight-extrabold);
+      font-size: 40px;
+      line-height: 1.2;
+      color: var(--color-dark);
+    }
+    
+    .about-text {
+      font-family: var(--font-sans);
+      font-weight: var(--font-weight-regular);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-primary);
+    }
+    
+    .about-checkmarks {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 8px;
+    }
+    
+    .checkmark-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    
+    .checkmark-icon {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(194, 24, 91, 0.1);
+      color: var(--color-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    
+    .checkmark-text {
+      font-family: var(--font-sans);
+      font-weight: var(--font-weight-medium);
+      font-size: 14px;
+      color: var(--color-dark);
+      line-height: 1.4;
+    }
+    
+    .about-image-wrapper {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s ease-out 0.25s, transform 0.5s ease-out 0.25s;
+    }
+    
+    .scroll-reveal.visible .about-image-wrapper {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .about-image {
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.10);
+    }
+    
+    /* Marquee */
+    .marquee {
+      background: #F7F7F7;
+      border-top: 0.5px solid rgba(0, 0, 0, 0.06);
+      border-bottom: 0.5px solid rgba(0, 0, 0, 0.06);
+      height: 64px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+    }
+    
+    .marquee-content {
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      animation: marqueeScroll 25s linear infinite;
+      white-space: nowrap;
+    }
+    
+    @keyframes marqueeScroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+    
+    .marquee-logo {
+      height: 32px;
+      width: auto;
+      flex-shrink: 0;
+    }
+    
+    /* Insurance Bento Grid Section */
+    .insurance-section {
+      background: #E5F0FA;
+      padding: 80px 0;
+    }
+    
+    .insurance-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    
+    .insurance-label {
+      color: var(--color-accent);
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: 22px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
+    
+    .insurance-title {
+      font-family: var(--font-sans);
+      font-weight: var(--font-weight-extrabold);
+      font-size: 40px;
+      line-height: 1.2;
+      color: var(--color-dark);
+      margin-bottom: 16px;
+    }
+    
+    .insurance-subtitle {
+      font-family: var(--font-sans);
+      font-weight: var(--font-weight-regular);
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--text-primary);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    
+    .bento-card {
+      position: relative;
+      height: 380px;
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.35s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .bento-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.20);
+    }
+    
+    .bento-card.span-2 {
+      grid-column: span 2;
+    }
+    
+    .bento-card-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    
+    .bento-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(26, 26, 46, 0.90) 0%,
+        rgba(26, 26, 46, 0.40) 50%,
+        rgba(26, 26, 46, 0.0) 100%
+      );
+    }
+    
+    .bento-card-badge {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(194, 24, 91, 0.85);
+      color: #FFFFFF;
+      font-family: var(--font-sans);
+      font-weight: var(--font-weight-semibold);
+      font-size: 11px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      z-index: 2;
+    }
+    
+    .bento-card-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 28px;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .bento-card-icon {
+      width: 28px;
+      height: 28px;
+      color: white;
+      margin-bottom: 8px;
+    }
+    
+    .bento-card-title {
+      font-family: var(--font-sans);
+      font-weight: var(--font-weight-bold);
+      font-size: 24px;
+      color: #FFFFFF;
+      line-height: 1.2;
+    }
+    
+    .bento-card-description {
+      font-family: var(--font-sans);
+      font-weight: var(--font-weight-regular);
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.80);
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .bento-card-link {
+      color: #E91E8C;
+      font-family: var(--font-sans);
+      font-weight: var(--font-weight-semibold);
+      font-size: 13px;
+      margin-top: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    /* Sections */
+    section {
+      padding: var(--section-padding-y-desktop) 0;
+    }
+    
+    .section-bg-secondary {
+      background: var(--bg-secondary);
+    }
+    
+    .section-bg-light {
+      background: #F7F7F7;
+    }
+    
+    .section-bg-dark {
+      background: linear-gradient(135deg, #1A1A2E 0%, #2D1B4E 100%);
+      color: var(--text-on-dark);
+    }
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    
+    .section-title {
+      font-size: var(--type-h2-size);
+      font-weight: var(--type-h2-weight);
+      line-height: var(--type-h2-line-height);
+      color: var(--color-dark);
+      margin-bottom: 12px;
+    }
+    
+    .section-bg-dark .section-title {
+      color: var(--text-on-dark);
+    }
+    
+    .section-subtitle {
+      font-size: 18px;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+    
+    .section-bg-dark .section-subtitle {
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    /* Problem/Solution Section */
+    .problem-solution {
+      text-align: center;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .problem-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin: 40px auto;
+      max-width: 800px;
+    }
+    
+    .problem-card {
+      background: white;
+      border-radius: 16px;
+      padding: 28px 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+    
+    .scroll-reveal.visible .problem-card:nth-child(1) {
+      animation: fadeUp 0.5s ease 0.1s forwards;
+    }
+    
+    .scroll-reveal.visible .problem-card:nth-child(2) {
+      animation: fadeUp 0.5s ease 0.2s forwards;
+    }
+    
+    .scroll-reveal.visible .problem-card:nth-child(3) {
+      animation: fadeUp 0.5s ease 0.3s forwards;
+    }
+    
+    .problem-card-icon-wrapper {
+      width: 72px;
+      height: 72px;
+      background: rgba(194, 24, 91, 0.10);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 48px;
+    }
+    
+    .problem-card-title {
+      font-family: var(--font-sans);
+      font-weight: var(--font-weight-semibold);
+      font-size: 16px;
+      color: var(--color-dark);
+      margin-bottom: 12px;
+    }
+    
+    .problem-card-description {
+      font-family: var(--font-sans);
+      font-weight: var(--font-weight-regular);
+      font-size: 14px;
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+    
+    .solution-divider {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      padding: 48px 0;
+      background: linear-gradient(to bottom, #E5F0FA 0%, #FFFFFF 100%);
+    }
+    
+    .divider-text {
+      font-family: var(--font-sans);
+      font-weight: var(--font-weight-bold);
+      font-size: 20px;
+      color: var(--color-accent);
+    }
+    
+    .divider-arrow {
+      width: 32px;
+      height: 32px;
+      color: var(--color-accent);
+      animation: bounce 2s ease infinite;
+    }
+    
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(8px);
+      }
+    }
+    
+    .solution-section {
+      background: white;
+      padding: 60px 0 80px;
+    }
+    
+    .solution-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin: 48px auto 0;
+      max-width: 800px;
+    }
+    
+    .solution-card {
+      position: relative;
+      background: white;
+      border-left: 3px solid var(--color-accent);
+      border-radius: 8px;
+      padding: 28px 24px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
+      text-align: left;
+    }
+    
+    .solution-card:hover {
+      transform: translateY(-4px);
+      border-left-color: #8a0f3f;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+    
+    .solution-card-number {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      font-family: var(--font-sans);
+      font-weight: var(--font-weight-extrabold);
+      font-size: 48px;
+      color: rgba(194, 24, 91, 0.12);
+      line-height: 1;
+    }
+    
+    .solution-card-icon {
+      width: 40px;
+      height: 40px;
+      color: var(--color-accent);
+      margin-bottom: 16px;
+    }
+    
+    .solution-card-title {
+      font-family: var(--font-sans);
+      font-weight: var(--font-weight-bold);
+      font-size: 18px;
+      color: var(--color-dark);
+      margin-bottom: 12px;
+    }
+    
+    .solution-card-description {
+      font-family: var(--font-sans);
+      font-weight: var(--font-weight-regular);
+      font-size: 14px;
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+    
+    .solution-cta {
+      text-align: center;
+      margin-top: 48px;
+      padding-top: 40px;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    
+    .solution-cta-title {
+      font-family: var(--font-sans);
+      font-weight: var(--font-weight-semibold);
+      font-size: 20px;
+      color: var(--color-dark);
+      margin-bottom: 24px;
+    }
+    
+    .solution-cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+    
+    /* Category Cards */
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--grid-gap);
+    }
+    
+    .category-card {
+      background: white;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-xl);
+      padding: 28px 24px;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .category-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(194, 24, 91, 0.25);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .category-icon {
+      width: 52px;
+      height: 52px;
+      background: rgba(194, 24, 91, 0.08);
+      color: var(--color-accent);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    
+    .category-title {
+      font-size: var(--type-h3-size);
+      font-weight: var(--type-h3-weight);
+      color: var(--color-dark);
+    }
+    
+    .category-description {
+      font-size: 14px;
+      color: var(--text-primary);
+      line-height: 1.5;
+      flex: 1;
+    }
+    
+    .category-link {
+      color: var(--color-accent);
+      font-size: 14px;
+      font-weight: var(--font-weight-semibold);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    /* Testimonials Section */
+    .testimonials-section {
+      position: relative;
+      background-image: url('images/Fondo-Testimonios.png');
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+      padding: 100px 0;
+      overflow: hidden;
+    }
+    
+    .testimonials-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(26, 26, 46, 0);
+      z-index: 0;
+    }
+    
+    .testimonials-overlay::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: transparent;
+    }
+    
+    .testimonials-section .container {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .testimonials-section .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    
+    .testimonials-section .section-title {
+      color: #FFFFFF;
+      font-family: var(--font-sans);
+      font-weight: var(--font-weight-extrabold);
+      font-size: 40px;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    
+    .testimonials-section .section-subtitle {
+      color: rgba(255, 255, 255, 0.70);
+      font-family: var(--font-sans);
+      font-weight: var(--font-weight-regular);
+      font-size: 17px;
+      line-height: 1.6;
+    }
+    
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--grid-gap);
+    }
+    
+    .testimonial-card {
+      background: rgba(255, 255, 255, 0.10);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: all 0.3s ease;
+    }
+    
+    .testimonial-card:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+    
+    .testimonial-stars {
+      display: flex;
+      gap: 4px;
+      color: #F59E0B;
+      font-size: 16px;
+    }
+    
+    .testimonial-text {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #FFFFFF;
+      flex: 1;
+    }
+    
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .testimonial-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--color-accent);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: var(--font-weight-bold);
+      font-size: 18px;
+    }
+    
+    .testimonial-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .testimonial-name {
+      font-size: 14px;
+      font-weight: var(--font-weight-semibold);
+      color: #FFFFFF;
+    }
+    
+    .testimonial-role {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.60);
+    }
+    
+    /* Logos Grid */
+    .logos-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .logo-card {
+      border: 0.5px solid rgba(0, 0, 0, 0.08);
+      border-radius: 10px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s ease;
+      filter: grayscale(100%) opacity(0.6);
+      background: white;
+    }
+    
+    .logo-card:hover {
+      filter: grayscale(0%) opacity(1);
+    }
+    
+    .logo-text {
+      font-size: 16px;
+      font-weight: var(--font-weight-bold);
+      color: var(--text-primary);
+      text-align: center;
+    }
+    
+    /* CTA Section */
+    .cta-section {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    .cta-badge {
+      background: rgba(194, 24, 91, 0.08);
+      border: 1px solid rgba(194, 24, 91, 0.20);
+      color: #8a0f3f;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+    
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 32px;
+      margin-bottom: 24px;
+    }
+    
+    .trust-badges {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-top: 32px;
+    }
+    
+    .trust-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .disclaimer {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-top: 12px;
+    }
+    
+    /* Mili Section */
+    .mili-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    
+    .mili-text {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    
+    .mili-badge {
+      background: rgba(194, 24, 91, 0.15);
+      border: 1px solid rgba(194, 24, 91, 0.3);
+      color: #ff94bd;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-semibold);
+      display: inline-block;
+      width: fit-content;
+    }
+    
+    .bullet-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .bullet-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    
+    .bullet-icon {
+      color: var(--color-accent);
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    
+    .chat-preview {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    
+    .chat-bubble {
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.5;
+      max-width: 80%;
+    }
+    
+    .chat-bubble.mili {
+      background: var(--color-accent);
+      color: white;
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+    
+    .chat-bubble.user {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+    
+    /* Footer */
+    footer {
+      background: #0f0f1a;
+      color: rgba(255, 255, 255, 0.55);
+      padding: 40px 0 0;
+    }
+    
+    .footer-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 40px;
+    }
+    
+    .footer-logo {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+      margin-bottom: 12px;
+    }
+    
+    .footer-info {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.45);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    
+    .social-icons {
+      display: flex;
+      gap: 12px;
+    }
+    
+    .social-icon {
+      width: 32px;
+      height: 32px;
+      border: 0.5px solid rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.55);
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+    
+    .social-icon:hover {
+      border-color: #C2185B;
+      color: #C2185B;
+    }
+    
+    .footer-column-label {
+      color: #C2185B;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      list-style: none;
+    }
+    
+    .footer-links a,
+    .footer-links li {
+      color: rgba(255, 255, 255, 0.55);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s ease;
+    }
+    
+    .footer-links a:hover {
+      color: #C2185B;
+    }
+    
+    .footer-contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.55);
+    }
+    
+    .footer-contact-item svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 24px;
+      margin-top: 32px;
+      border-top: 0.5px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .footer-copyright {
+      color: rgba(255, 255, 255, 0.25);
+      font-size: 11px;
+    }
+    
+    .footer-mili-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.25);
+      font-size: 11px;
+    }
+    
+    .footer-mili-status .pulse-dot {
+      width: 6px;
+      height: 6px;
+    }
+    
+    /* Floating Mili Button */
+    .mili-float {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--color-accent);
+      color: white;
+      padding: 14px 20px;
+      border-radius: 28px;
+      box-shadow: 0 4px 20px rgba(194, 24, 91, 0.40);
+      font-weight: var(--font-weight-semibold);
+      font-size: var(--font-size-base);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      z-index: 999;
+      border: none;
+    }
+    
+    .mili-float:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px rgba(194, 24, 91, 0.50);
+    }
+    
+    /* Scroll Reveal */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+    
+    .scroll-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-menu {
+        display: none;
+      }
+      
+      .hero-video {
+        width: 100%;
+        object-position: center center;
+      }
+      
+      .hero-content {
+        width: 100%;
+      }
+      
+      .hero .container {
+        padding: 0 var(--section-padding-x);
+      }
+      
+      .hero-title {
+        font-size: 36px;
+      }
+      
+      .hero-image {
+        width: 100%;
+        height: auto;
+      }
+      
+      .bento-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      
+      .bento-card {
+        height: 320px;
+      }
+      
+      .about-section {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      
+      .bento-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .bento-card,
+      .bento-card.span-2 {
+        grid-column: span 1;
+        height: 280px;
+      }
+      
+      .insurance-title {
+        font-size: 32px;
+      }
+      
+      .about-title {
+        font-size: 32px;
+      }
+      
+      .about-checkmarks {
+        grid-template-columns: 1fr;
+      }
+      
+      .category-grid,
+      .testimonial-grid,
+      .logos-grid,
+      .problem-cards,
+      .solution-cards {
+        grid-template-columns: 1fr;
+      }
+      
+      .solution-cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .benefits-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .mili-content,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .mili-float span {
+        display: none;
+      }
+      
+      .mili-float {
+        width: 52px;
+        height: 52px;
+        padding: 0;
+        justify-content: center;
+        border-radius: 50%;
+      }
+    }
+    
+    /* Problem/Solution Carousel Section */
+    .carousel-section {
+      background: #F7F7F7;
+      padding: 80px 0;
+    }
+    
+    .carousel-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    
+    .carousel-label {
+      font-family: var(--font-sans);
+      font-size: 22px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #C2185B;
+      margin-bottom: 12px;
+    }
+    
+    .carousel-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 40px;
+      font-weight: 800;
+      color: #1A1A2E;
+    }
+    
+    .carousel-container {
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    
+    .carousel-group-label {
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      min-height: 20px;
+      animation: fadeIn 0.4s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .carousel-wrapper {
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .carousel-track-multi {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    
+    .carousel-group {
+      min-width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    
+    .carousel-card {
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .carousel-card.problem {
+      border-top: 3px solid #C2185B;
+    }
+    
+    .carousel-card.solution {
+      border-top: 3px solid #22C55E;
+    }
+    
+    .card-icon {
+      width: 48px;
+      height: 48px;
+    }
+    
+    .card-icon.problem {
+      color: #C2185B;
+    }
+    
+    .card-icon.solution {
+      color: #22C55E;
+    }
+    
+    .card-badge {
+      display: inline-block;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #22C55E;
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1A1A2E;
+      margin: 0;
+    }
+    
+    .card-description {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #666;
+    }
+    
+    .carousel-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid #C2185B;
+      background: white;
+      color: #C2185B;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+    
+    .carousel-nav:hover {
+      background: #C2185B;
+      color: white;
+    }
+    
+    .carousel-nav.prev {
+      left: -50px;
+    }
+    
+    .carousel-nav.next {
+      right: -50px;
+    }
+    
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 32px;
+    }
+    
+    .carousel-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #D1D5DB;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .carousel-dot.problem-group {
+      background: rgba(194, 24, 91, 0.3);
+    }
+    
+    .carousel-dot.solution-group {
+      background: rgba(34, 197, 94, 0.3);
+    }
+    
+    .carousel-dot.active.problem-group {
+      background: #C2185B;
+      transform: scale(1.3);
+    }
+    
+    .carousel-dot.active.solution-group {
+      background: #22C55E;
+      transform: scale(1.3);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav id="navbar">
+    <div class="container">
+      <img src="Logo_Leon_V2_transparente.png" alt="M&L Seguros" class="nav-logo">
+      <ul class="nav-menu">
+        <li><a href="#" class="active">Inicio</a></li>
+        <li class="has-dropdown">
+          <a href="#vida">Vida <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-menu">
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Individual</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Vida Colectiva</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">AP (Accidentes Personales)</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Pólizas de Salud</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Gastos Emergentes</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Exequial</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Viajes Internacionales</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">ARL (Riesgos Laborales)</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Mascotas</div>
+            </div>
+          </div>
+        </li>
+        <li class="has-dropdown">
+          <a href="#autos">Autos <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-menu">
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Vehículos Particulares</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Vehículos Comerciales</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Vehículos Pesados</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Maquinaria y Equipos Móviles</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Movilidad Personal</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Crédito de Autos</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Pólizas Colectivas</div>
+            </div>
+          </div>
+        </li>
+        <li class="has-dropdown">
+          <a href="#cumplimiento">Cumplimiento <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-menu">
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Entidades Estatales</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Judiciales</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Cumplimiento Particular</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">RCE Derivado de Cumplimiento</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Disposiciones Legales</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Arrendamiento</div>
+            </div>
+          </div>
+        </li>
+        <li class="has-dropdown">
+          <a href="#generales">Generales <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></a>
+          <div class="mega-menu">
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Pólizas de Hogar</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Empresas y/o Persona Natural</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Educativa</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Transporte de Mercancías</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">RC Profesional</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Pólizas de Copropiedades</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Todo Riesgo Construcción</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">Todo Riesgo Montaje</div>
+            </div>
+            <div class="mega-menu-column">
+              <div class="mega-menu-title">RC Hidrocarburos</div>
+            </div>
+          </div>
+        </li>
+        <li><a href="/comparar">Comparar</a></li>
+        <li><a href="#aliadas">Aliadas</a></li>
+      </ul>
+      <div class="nav-right">
+        <div class="badge-ai" onclick="openMili()">
+          <span class="pulse-dot"></span>
+          IA 24/7
+        </div>
+        <a href="#contacto" class="btn-primary">Contacto</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <video autoplay muted loop playsinline class="hero-video">
+      <source src="Video_Banner2_sin_audio.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="pulse-dot"></span>
+          Ahora con asistente IA 24/7 · Mili
+        </div>
+        
+        <h1 class="hero-title">
+          Proteger a tu familia<br>
+          <span class="accent">nunca fue tan fácil</span>
+        </h1>
+        
+        <p class="hero-subtitle">
+          Somos tus asesores de confianza. Con acceso a todo el mercado 
+          asegurador colombiano, encontramos la póliza perfecta para 
+          proteger lo que más importa.
+        </p>
+        
+        <div class="hero-ctas">
+          <button class="btn-primary">
+            Hablar con Asesor
+          </button>
+          <a href="#comparar" class="btn-secondary">
+            Comparar seguros →
+          </a>
+        </div>
+        
+        <div class="hero-social-proof">
+          <div class="avatar-stack">
+            <div class="avatar" style="background: #FF6B6B;">L</div>
+            <div class="avatar" style="background: #4ECDC4;">A</div>
+            <div class="avatar" style="background: #95E1D3;">M</div>
+            <div class="avatar" style="background: #F38181;">D</div>
+          </div>
+          <div class="stars">
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+          </div>
+          <span class="social-proof-text">+1.000 familias protegidas · 4.9/5 en satisfacción</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee">
+    <div class="marquee-content">
+      <img src="logos/sura.png" alt="SURA" class="marquee-logo">
+      <img src="logos/mapfre.png" alt="MAPFRE" class="marquee-logo">
+      <img src="logos/bolivar.png" alt="Seguros Bolívar" class="marquee-logo">
+      <img src="logos/axa-colpatria.png" alt="AXA Colpatria" class="marquee-logo">
+      <img src="logos/estado.png" alt="Seguros del Estado" class="marquee-logo">
+      <img src="logos/equidad.png" alt="Equidad Seguros" class="marquee-logo">
+      <img src="logos/previsora.png" alt="Previsora" class="marquee-logo">
+      <img src="logos/mundial.png" alt="Seguros Mundial" class="marquee-logo">
+      <img src="logos/medicos.png" alt="Seguros Médicos Internacionales" class="marquee-logo">
+      <img src="logos/qualitas.png" alt="Qualitas" class="marquee-logo">
+      <img src="logos/finesa.png" alt="Finesa" class="marquee-logo">
+      <img src="logos/sufi.png" alt="Sufi" class="marquee-logo">
+      <!-- Duplicate for seamless loop -->
+      <img src="logos/sura.png" alt="SURA" class="marquee-logo">
+      <img src="logos/mapfre.png" alt="MAPFRE" class="marquee-logo">
+      <img src="logos/bolivar.png" alt="Seguros Bolívar" class="marquee-logo">
+      <img src="logos/axa-colpatria.png" alt="AXA Colpatria" class="marquee-logo">
+      <img src="logos/estado.png" alt="Seguros del Estado" class="marquee-logo">
+      <img src="logos/equidad.png" alt="Equidad Seguros" class="marquee-logo">
+      <img src="logos/previsora.png" alt="Previsora" class="marquee-logo">
+      <img src="logos/mundial.png" alt="Seguros Mundial" class="marquee-logo">
+      <img src="logos/medicos.png" alt="Seguros Médicos Internacionales" class="marquee-logo">
+      <img src="logos/qualitas.png" alt="Qualitas" class="marquee-logo">
+      <img src="logos/finesa.png" alt="Finesa" class="marquee-logo">
+      <img src="logos/sufi.png" alt="Sufi" class="marquee-logo">
+    </div>
+  </div>
+
+  <!-- Insurance Bento Grid Section -->
+  <section class="insurance-section scroll-reveal">
+    <div class="container">
+      <div class="insurance-header">
+        <div class="insurance-label">NUESTROS SEGUROS</div>
+        <h2 class="insurance-title">
+          Encuentra la protección perfecta para cada aspecto de tu vida
+        </h2>
+        <p class="insurance-subtitle">
+          Desde tu auto hasta tu negocio, tenemos la cobertura ideal para ti. Explora nuestras categorías principales.
+        </p>
+      </div>
+      
+      <div class="bento-grid">
+        <!-- Autos Card -->
+        <a href="/autos/vehiculos-particulares" class="bento-card span-2">
+          <img src="images/Autos.png" alt="Seguros de Autos" class="bento-card-image">
+          <div class="bento-card-overlay"></div>
+          <div class="bento-card-badge">Protección total</div>
+          <div class="bento-card-content">
+            <svg class="bento-card-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg>
+            <h3 class="bento-card-title">Autos y Movilidad</h3>
+            <p class="bento-card-description">
+              Particulares, pesados, motos y maquinaria. Cobertura todo riesgo con asistencia 24/7.
+            </p>
+            <span class="bento-card-link">Ver opciones →</span>
+          </div>
+        </a>
+        
+        <!-- Vida Card -->
+        <a href="/vida/individual" class="bento-card">
+          <img src="images/Vida.png" alt="Seguros de Vida" class="bento-card-image">
+          <div class="bento-card-overlay"></div>
+          <div class="bento-card-badge">Protección integral</div>
+          <div class="bento-card-content">
+            <svg class="bento-card-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+            <h3 class="bento-card-title">Vida y Familia</h3>
+            <p class="bento-card-description">
+              Seguros de vida, salud, accidentes y mascotas.
+            </p>
+            <span class="bento-card-link">Ver opciones →</span>
+          </div>
+        </a>
+        
+        <!-- Cumplimiento Card -->
+        <a href="/cumplimiento/entidades-estatales" class="bento-card">
+          <img src="images/Cumplimiento.png" alt="Seguros de Cumplimiento" class="bento-card-image">
+          <div class="bento-card-overlay"></div>
+          <div class="bento-card-badge">Garantía jurídica</div>
+          <div class="bento-card-content">
+            <svg class="bento-card-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="m9 15 2 2 4-4"/></svg>
+            <h3 class="bento-card-title">Cumplimiento</h3>
+            <p class="bento-card-description">
+              Pólizas para contratos estatales, privados y arrendamiento.
+            </p>
+            <span class="bento-card-link">Ver opciones →</span>
+          </div>
+        </a>
+        
+        <!-- Generales Card -->
+        <a href="/generales/polizas-de-hogar" class="bento-card span-2">
+          <img src="images/Generales.png" alt="Seguros Generales" class="bento-card-image">
+          <div class="bento-card-overlay"></div>
+          <div class="bento-card-badge">Patrimonio seguro</div>
+          <div class="bento-card-content">
+            <svg class="bento-card-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+            <h3 class="bento-card-title">Generales</h3>
+            <p class="bento-card-description">
+              Hogar, empresas, construcción, transporte de mercancías y más.
+            </p>
+            <span class="bento-card-link">Ver opciones →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Us Section -->
+  <section class="scroll-reveal" style="background: #FFFFFF; padding: 80px 0;">
+    <div class="container">
+      <div class="about-section">
+        <div class="about-content">
+          <div class="about-label">SOBRE NOSOTROS</div>
+          
+          <h2 class="about-title">
+            No somos una aseguradora.<br>
+            Somos tus aliados.
+          </h2>
+          
+          <p class="about-text">
+            Consultores de Seguros M&L nació con una misión clara:
+            simplificar el mundo de los seguros para ti. A diferencia
+            de comprar directo con una aseguradora, nosotros trabajamos
+            para ti, no para ellos.
+          </p>
+          
+          <p class="about-text">
+            Comparamos precios, coberturas y beneficios de las mejores
+            aseguradoras de Colombia para encontrar exactamente lo que
+            necesitas, sin venderte lo que no te sirve.
+          </p>
+          
+          <div class="about-checkmarks">
+            <div class="checkmark-item">
+              <div class="checkmark-icon">✓</div>
+              <div class="checkmark-text">Asesoría 100% personalizada y sin costo</div>
+            </div>
+            <div class="checkmark-item">
+              <div class="checkmark-icon">✓</div>
+              <div class="checkmark-text">Acompañamiento en reclamaciones</div>
+            </div>
+            <div class="checkmark-item">
+              <div class="checkmark-icon">✓</div>
+              <div class="checkmark-text">Sin letra pequeña ni sorpresas</div>
+            </div>
+            <div class="checkmark-item">
+              <div class="checkmark-icon">✓</div>
+              <div class="checkmark-text">Comparamos opciones de múltiples aseguradoras</div>
+            </div>
+            <div class="checkmark-item">
+              <div class="checkmark-icon">✓</div>
+              <div class="checkmark-text">Atención rápida por WhatsApp</div>
+            </div>
+            <div class="checkmark-item">
+              <div class="checkmark-icon">✓</div>
+              <div class="checkmark-text">Planes a tu medida y presupuesto</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="about-image-wrapper">
+          <img src="aliados_confianza_v3.png" alt="Aliados de Confianza - M&L Seguros" class="about-image">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="testimonials-section scroll-reveal">
+    <div class="testimonials-overlay"></div>
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Lo que dicen nuestras familias</h2>
+        <p class="section-subtitle">Más de 1.000 familias colombianas confían en M&L</p>
+      </div>
+      
+      <div class="testimonial-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">
+            Gracias a M&L encontré el seguro perfecto para mi familia.
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">L</div>
+            <div class="testimonial-info">
+              <div class="testimonial-name">Laura G.</div>
+              <div class="testimonial-role">Madre de familia</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">
+            La asesoría fue clara y rápida. Me ahorró tiempo y dinero.
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" style="background: #4ECDC4;">A</div>
+            <div class="testimonial-info">
+              <div class="testimonial-name">Andrés M.</div>
+              <div class="testimonial-role">Empresario</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">
+            Me sentí acompañado en todo el proceso. Totalmente recomendado.
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar" style="background: #F38181;">D</div>
+            <div class="testimonial-info">
+              <div class="testimonial-name">Diana R.</div>
+              <div class="testimonial-role">Profesional independiente</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Problem/Solution Carousel Section -->
+  <section class="carousel-section scroll-reveal">
+    <div class="container">
+      <div class="carousel-header">
+        <div class="carousel-label">CÓMO FUNCIONA</div>
+        <h2 class="carousel-title">El problema y nuestra solución</h2>
+      </div>
+      
+      <div class="carousel-container">
+        <button class="carousel-nav prev" onclick="prevGroup()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m15 18-6-6 6-6"/>
+          </svg>
+        </button>
+        
+        <div class="carousel-group-label" id="groupLabel">❌ EL PROBLEMA</div>
+        
+        <div class="carousel-wrapper" onmouseenter="pauseGroupCarousel()" onmouseleave="resumeGroupCarousel()">
+          <div class="carousel-track-multi" id="carouselTrackMulti">
+            <!-- Grupo 1 - Problemas -->
+            <div class="carousel-group">
+              <div class="carousel-card problem">
+                <svg class="card-icon problem" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>
+                </svg>
+                <h3 class="card-title">Demasiadas opciones</h3>
+                <p class="card-description">
+                  El mercado tiene cientos de pólizas y es difícil saber cuál es la correcta.
+                </p>
+              </div>
+              
+              <div class="carousel-card problem">
+                <svg class="card-icon problem" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><circle cx="12" cy="16" r="2"/><path d="M12 12v.01"/>
+                </svg>
+                <h3 class="card-title">Información poco clara</h3>
+                <p class="card-description">
+                  Las aseguradoras usan términos técnicos que confunden al tomador.
+                </p>
+              </div>
+              
+              <div class="carousel-card problem">
+                <svg class="card-icon problem" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <h3 class="card-title">Proceso lento</h3>
+                <p class="card-description">
+                  Cotizar en múltiples empresas toma días y mucho esfuerzo.
+                </p>
+              </div>
+            </div>
+            
+            <!-- Grupo 2 - Soluciones -->
+            <div class="carousel-group">
+              <div class="carousel-card solution">
+                <div class="card-badge">M&L lo resuelve ✓</div>
+                <svg class="card-icon solution" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M13 6h3a2 2 0 0 1 2 2v7"/><path d="M11 18H8a2 2 0 0 1-2-2V9"/>
+                </svg>
+                <h3 class="card-title">Comparamos por ti</h3>
+                <p class="card-description">
+                  Analizamos todas las opciones y te presentamos solo las mejores.
+                </p>
+              </div>
+              
+              <div class="carousel-card solution">
+                <div class="card-badge">M&L lo resuelve ✓</div>
+                <svg class="card-icon solution" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/>
+                </svg>
+                <h3 class="card-title">Asesoría sin costo</h3>
+                <p class="card-description">
+                  Nuestros asesores y Mili te guían sin ningún cobro adicional.
+                </p>
+              </div>
+              
+              <div class="carousel-card solution">
+                <div class="card-badge">M&L lo resuelve ✓</div>
+                <svg class="card-icon solution" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/>
+                </svg>
+                <h3 class="card-title">Respaldo garantizado</h3>
+                <p class="card-description">
+                  Trabajamos con las mejores aseguradoras de Colombia.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <button class="carousel-nav next" onclick="nextGroup()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m9 18 6-6-6-6"/>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="carousel-dots" id="carouselDotsMulti">
+        <div class="carousel-dot problem-group active" onclick="goToGroup(0)"></div>
+        <div class="carousel-dot solution-group" onclick="goToGroup(1)"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mili Section -->
+  <section style="position: relative; min-height: 620px; overflow: hidden; display: flex; align-items: center;" class="scroll-reveal">
+    
+    <img src="images/Milli-3-final.png" alt="" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center center; z-index: 0;">
+    
+    <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(10,10,20,0.94) 0%, rgba(10,10,20,0.88) 35%, rgba(10,10,20,0.25) 58%, rgba(10,10,20,0.0) 100%); z-index: 1;"></div>
+    
+    <div style="position: relative; z-index: 2; width: 100%; max-width: 1200px; margin: 0 auto; padding: 60px 24px; display: flex; align-items: center;">
+      <div style="max-width: 480px; margin-left: 0; margin-right: auto;">
+        <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(194,24,91,0.15); border: 1px solid rgba(194,24,91,0.40); border-radius: 20px; padding: 6px 16px; margin-bottom: 20px;">
+          <span style="width: 8px; height: 8px; background: #22C55E; border-radius: 50%; animation: pulseGreen 2s ease infinite;"></span>
+          <span style="color: #FFFFFF; font-size: 12px; font-weight: 500;">✦ Asistente IA · Disponible 24/7</span>
+        </div>
+        
+        <h2 style="font-family: 'Inter', sans-serif; font-size: 42px; font-weight: 800; color: #FFFFFF; line-height: 1.1; margin-bottom: 8px;">
+          Conoce a Mili
+        </h2>
+        
+        <p style="font-family: 'Lora', serif; font-size: 22px; font-style: italic; color: #E91E8C; margin-bottom: 20px;">
+          Tu asesora virtual de seguros
+        </p>
+        
+        <p style="font-family: 'Inter', sans-serif; font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.70); margin-bottom: 28px;">
+          Resuelve tus dudas sobre seguros al instante. Disponible 24/7, sin esperas y sin costo.
+        </p>
+        
+        <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 36px;">
+          <div style="display: flex; align-items: start; gap: 12px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.85);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px; color: #E91E8C;">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span>Conoce todo el catálogo de M&L</span>
+          </div>
+          <div style="display: flex; align-items: start; gap: 12px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.85);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px; color: #E91E8C;">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span>Compara opciones entre aseguradoras</span>
+          </div>
+          <div style="display: flex; align-items: start; gap: 12px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.85);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 1px; color: #E91E8C;">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            <span>Te conecta con un asesor humano cuando lo necesites</span>
+          </div>
+        </div>
+        
+        <button onclick="openMili()" style="font-family: 'Inter', sans-serif; background: #C2185B; color: #FFFFFF; border: none; border-radius: 8px; padding: 14px 28px; font-size: 15px; font-weight: 600; cursor: pointer; margin-bottom: 12px; animation: pulseRing 2.5s ease infinite;">
+          💬 Hablar con Mili ahora
+        </button>
+        
+        <p style="font-family: 'Inter', sans-serif; font-size: 12px; color: rgba(255,255,255,0.40); font-weight: 400;">
+          Completamente gratis · Sin registro
+        </p>
+      </div>
+    </div>
+  </section>
+  
+  <style>
+    @keyframes pulseRing {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(194,24,91,0.4);
+      }
+      50% {
+        box-shadow: 0 0 0 8px rgba(194,24,91,0);
+      }
+    }
+  </style>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-main">
+      <!-- Columna 1: Logo + Info -->
+      <div>
+        <img src="Logo_Leon_V2_transparente.png" alt="M&L Seguros" class="footer-logo">
+        <p class="footer-info">
+          Consultores de Seguros · Bogotá, Colombia<br>
+          NIT: 901331365-1
+        </p>
+        <div class="social-icons">
+          <a href="#" class="social-icon" aria-label="Facebook">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+            </svg>
+          </a>
+          <a href="#" class="social-icon" aria-label="LinkedIn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+              <rect x="2" y="9" width="4" height="12"/>
+              <circle cx="4" cy="4" r="2"/>
+            </svg>
+          </a>
+          <a href="#" class="social-icon" aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Columna 2: Navegación -->
+      <div>
+        <div class="footer-column-label">NAVEGACIÓN</div>
+        <ul class="footer-links">
+          <li><a href="#">Inicio</a></li>
+          <li><a href="#vida">Vida</a></li>
+          <li><a href="#autos">Autos</a></li>
+          <li><a href="#cumplimiento">Cumplimiento</a></li>
+          <li><a href="#generales">Generales</a></li>
+          <li><a href="#comparar">Comparar</a></li>
+          <li><a href="#aliadas">Aliadas</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </div>
+      
+      <!-- Columna 3: Contacto -->
+      <div>
+        <div class="footer-column-label">CONTACTO</div>
+        <div class="footer-contact-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+          </svg>
+          <span>+57 xxx xxx xxxx</span>
+        </div>
+        <div class="footer-contact-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C2185B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          <span>info@consultoresmyl.com</span>
+        </div>
+        <div class="footer-contact-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          <span>Bogotá, Colombia</span>
+        </div>
+        <div class="footer-contact-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+          <span>Aviso legal · Políticas de privacidad</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Copyright bar -->
+    <div class="footer-bottom">
+      <div class="footer-copyright">
+        © 2025 Consultores de Seguros M&L — Todos los derechos reservados
+      </div>
+      <div class="footer-mili-status">
+        <span class="pulse-dot"></span>
+        Mili IA disponible 24/7
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Mili Button -->
+  <button onclick="openMili()" style="
+    position:fixed; top:50%; right:0;
+    transform:translateY(-50%);
+    z-index:900;
+    background:linear-gradient(135deg,#1A1A2E,#2D1B4E);
+    border:1px solid rgba(194,24,91,0.45);
+    border-right:none;
+    border-radius:16px 0 0 16px;
+    padding:16px 14px 16px 16px;
+    display:flex; align-items:center; gap:10px;
+    box-shadow:-4px 0 24px rgba(194,24,91,0.25);
+    cursor:pointer;
+    transition:transform 0.25s ease, box-shadow 0.25s ease;
+    font-family:Inter,sans-serif;"
+    onmouseenter="this.style.transform='translateY(-50%) translateX(-4px)';this.style.boxShadow='-6px 0 32px rgba(194,24,91,0.45)'"
+    onmouseleave="this.style.transform='translateY(-50%)';this.style.boxShadow='-4px 0 24px rgba(194,24,91,0.25)'">
+    <div style="position:relative;flex-shrink:0">
+      <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#C2185B,#E91E8C);display:flex;align-items:center;justify-content:center;">
+        <span style="font-size:17px;font-weight:800;color:#fff;font-family:Inter,sans-serif">M</span>
+      </div>
+      <div style="position:absolute;bottom:0;right:0;width:11px;height:11px;border-radius:50%;background:#22C55E;border:2px solid #1A1A2E;animation:pulseGreen 2s ease infinite;"></div>
+    </div>
+    <div style="text-align:left">
+      <p style="margin:0;font-size:13px;font-weight:700;color:#fff;line-height:1.2;font-family:Inter,sans-serif">Hablar con Mili</p>
+      <p style="margin:0;font-size:10px;color:rgba(255,255,255,0.55);font-family:Inter,sans-serif">● Respuesta inmediata</p>
+    </div>
+  </button>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    let lastScroll = 0;
+    
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      
+      if (currentScroll > 10) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+      
+      lastScroll = currentScroll;
+    });
+    
+    // Scroll reveal animation
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+    
+    document.querySelectorAll('.scroll-reveal').forEach(el => {
+      observer.observe(el);
+    });
+    
+    // Open Mili chat
+    function openMili() {
+      alert('¡Mili estará disponible próximamente! Por ahora, contáctanos por WhatsApp o email.');
+    }
+    
+    // Carousel functionality
+    let currentGroup = 0;
+    let groupCarouselInterval;
+    const totalGroups = 2;
+    const groupLabels = ['❌ EL PROBLEMA', '✅ NUESTRA SOLUCIÓN'];
+    const groupLabelColors = ['#C2185B', '#22C55E'];
+    
+    function updateGroupCarousel() {
+      const track = document.getElementById('carouselTrackMulti');
+      const dots = document.querySelectorAll('#carouselDotsMulti .carousel-dot');
+      const label = document.getElementById('groupLabel');
+      
+      if (track && label) {
+        track.style.transform = `translateX(-${currentGroup * 100}%)`;
+        
+        dots.forEach((dot, index) => {
+          dot.classList.toggle('active', index === currentGroup);
+        });
+        
+        label.textContent = groupLabels[currentGroup];
+        label.style.color = groupLabelColors[currentGroup];
+        label.style.animation = 'none';
+        setTimeout(() => {
+          label.style.animation = 'fadeIn 0.4s ease';
+        }, 10);
+      }
+    }
+    
+    function nextGroup() {
+      currentGroup = (currentGroup + 1) % totalGroups;
+      updateGroupCarousel();
+    }
+    
+    function prevGroup() {
+      currentGroup = (currentGroup - 1 + totalGroups) % totalGroups;
+      updateGroupCarousel();
+    }
+    
+    function goToGroup(index) {
+      currentGroup = index;
+      updateGroupCarousel();
+    }
+    
+    function startGroupCarousel() {
+      groupCarouselInterval = setInterval(nextGroup, 3000);
+    }
+    
+    function pauseGroupCarousel() {
+      clearInterval(groupCarouselInterval);
+    }
+    
+    function resumeGroupCarousel() {
+      startGroupCarousel();
+    }
+    
+    // Start auto-play when page loads
+    if (document.getElementById('carouselTrackMulti')) {
+      startGroupCarousel();
+    }
+  </script>
+</body>
+</html>

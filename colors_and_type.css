@@ -1,0 +1,80 @@
+/* ============================================================
+   colors_and_type.css — Design Tokens · Consultores M&L Seguros
+   Fuente: 00_BRAND_SYSTEM.md
+   ============================================================ */
+
+:root {
+  /* ── Colores de fondo ───────────────────────────── */
+  --bg-primary:    #FFFFFF;
+  --bg-secondary:  #E5F0FA;
+  --bg-neutral:    #F7F7F7;
+
+  /* ── Colores de texto ───────────────────────────── */
+  --text-primary:   #1A1A2E;
+  --text-secondary: #4A4A4A;
+  --text-muted:     #9E9E9E;
+  --text-on-accent: #FFFFFF;
+  --text-on-dark:   #FFFFFF;
+
+  /* ── Colores de marca ───────────────────────────── */
+  --color-accent:       #C2185B;
+  --color-accent-hover: #A31545;
+  --color-dark:         #1A1A2E;
+  --color-dark-mid:     #2D1B4E;
+  --color-success:      #25D366;
+  --color-gold:         #F59E0B;
+  --border-light:       rgba(0, 0, 0, 0.07);
+
+  /* ── Tipografía ─────────────────────────────────── */
+  --font-sans:  'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'Lora', Georgia, serif;
+
+  --font-size-hero: clamp(34px, 5vw, 56px);
+  --font-size-h2:   clamp(28px, 3.5vw, 42px);
+  --font-size-h3:   22px;
+  --font-size-base: 15px;
+  --font-size-sm:   13px;
+  --font-size-tag:  12px;
+
+  --type-h2-size:        clamp(28px, 3.5vw, 40px);
+  --type-h2-weight:      800;
+  --type-h2-line-height: 1.2;
+  --type-h3-size:        22px;
+  --type-h3-weight:      600;
+
+  --font-weight-regular:  400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+  --font-weight-extrabold:800;
+
+  --line-height-tight:  1.1;
+  --line-height-normal: 1.6;
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-wide:   0.08em;
+
+  /* ── Layout ─────────────────────────────────────── */
+  --container-max-width:    1200px;
+  --section-padding-x:      24px;
+  --section-padding-y-desktop: 80px;
+  --grid-gap:               24px;
+
+  /* ── Bordes y radios ─────────────────────────────── */
+  --radius-sm:   6px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   20px;
+  --radius-full: 9999px;
+
+  /* ── Sombras ─────────────────────────────────────── */
+  --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 16px rgba(194, 24, 91, 0.30);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.10);
+}
+
+/* ── Responsive overrides ─────────────────────────── */
+@media (max-width: 768px) {
+  :root {
+    --section-padding-y-desktop: 48px;
+  }
+}

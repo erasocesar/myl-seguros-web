@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aseguradoras Aliadas — Consultores M&L Seguros</title>
+  <meta name="description" content="Conoce las aseguradoras aliadas de Consultores M&L Seguros. Trabajamos con las mejores compañías del mercado colombiano.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:ital,wght@1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../colors_and_type.css">
+  <link rel="stylesheet" href="../css/shared.css">
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js" defer></script>
+
+  <style>
+    .aliadas-hero {
+      background: linear-gradient(135deg, var(--color-dark) 0%, var(--color-dark-mid) 100%);
+      padding: 80px var(--section-padding-x) 60px;
+      text-align: center;
+      color: var(--text-on-dark);
+    }
+    .aliadas-hero h1  { font-size: clamp(28px,4vw,44px); font-weight: 800; margin: 0 0 12px; }
+    .aliadas-hero p   { font-size: 16px; opacity: .75; max-width: 560px; margin: 0 auto 28px; }
+    .aliadas-hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    .aliadas-stat { text-align: center; }
+    .aliadas-stat-num { font-size: 36px; font-weight: 800; color: var(--color-accent); line-height: 1; }
+    .aliadas-stat-label { font-size: 13px; opacity: .6; margin-top: 4px; }
+
+    .aliadas-body {
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+      padding: 64px var(--section-padding-x) 80px;
+    }
+
+    .section-eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: clamp(22px,3vw,32px);
+      font-weight: 800;
+      color: var(--text-primary);
+      margin: 0 0 40px;
+    }
+
+    .carriers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 64px;
+    }
+    .carrier-card {
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 24px 16px;
+      text-align: center;
+      transition: all .2s;
+      background: var(--bg-primary);
+      cursor: default;
+    }
+    .carrier-card:hover {
+      border-color: rgba(194,24,91,.3);
+      box-shadow: var(--shadow-sm);
+      transform: translateY(-2px);
+    }
+    .carrier-logo-wrap {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-md);
+      background: var(--bg-neutral);
+      overflow: hidden;
+    }
+    .carrier-logo-wrap img {
+      max-width: 60px;
+      max-height: 60px;
+      object-fit: contain;
+      filter: grayscale(1);
+      transition: filter .2s;
+    }
+    .carrier-card:hover .carrier-logo-wrap img { filter: grayscale(0); }
+    .carrier-logo-placeholder {
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+    }
+    .carrier-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    .carrier-products-count {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .carrier-categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    .cat-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .cat-VIDA        { background: rgba(37,211,102,.12); color: #1a8a45; }
+    .cat-AUTOS       { background: rgba(194,24,91,.1);   color: var(--color-accent); }
+    .cat-CUMPLIMIENTO{ background: rgba(245,158,11,.12); color: #a16207; }
+    .cat-GENERALES   { background: rgba(26,26,46,.08);   color: var(--color-dark); }
+
+    /* Trust section */
+    .trust-section {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      padding: 48px 40px;
+      text-align: center;
+    }
+    .trust-section h2 { font-size: clamp(20px,2.5vw,28px); font-weight: 800; color: var(--text-primary); margin: 0 0 12px; }
+    .trust-section p  { color: var(--text-secondary); max-width: 520px; margin: 0 auto 28px; }
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 640px;
+      margin: 0 auto 32px;
+    }
+    .trust-item { text-align: center; }
+    .trust-icon {
+      width: 48px; height: 48px;
+      background: var(--color-accent);
+      border-radius: var(--radius-full);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 10px;
+      color: #fff;
+    }
+    .trust-item-label { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+
+    @media (max-width: 640px) {
+      .carriers-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .trust-grid { grid-template-columns: 1fr; }
+      .aliadas-hero-stats { gap: 24px; }
+      .trust-section { padding: 32px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <div class="container">
+    <img src="../Logo_Leon_V2_transparente.png" alt="M&L Seguros" class="nav-logo">
+    <ul class="nav-menu">
+      <li><a href="/">Inicio</a></li>
+      <li class="has-dropdown">
+        <a href="#vida">Vida
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </a>
+        <div class="mega-menu">
+          <div class="mega-menu-column"><div class="mega-menu-title">Individual</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Vida Colectiva</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">AP (Accidentes Personales)</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Pólizas de Salud</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Exequial</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Viajes Internacionales</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">ARL (Riesgos Laborales)</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Mascotas</div></div>
+        </div>
+      </li>
+      <li class="has-dropdown">
+        <a href="#autos">Autos
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </a>
+        <div class="mega-menu">
+          <div class="mega-menu-column"><div class="mega-menu-title">Vehículos Particulares</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Vehículos Comerciales</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Vehículos Pesados</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Maquinaria y Equipos Móviles</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Movilidad Personal</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Crédito de Autos</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Pólizas Colectivas</div></div>
+        </div>
+      </li>
+      <li class="has-dropdown">
+        <a href="#cumplimiento">Cumplimiento
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </a>
+        <div class="mega-menu">
+          <div class="mega-menu-column"><div class="mega-menu-title">Entidades Estatales</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Judiciales</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Cumplimiento Particular</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Arrendamiento</div></div>
+        </div>
+      </li>
+      <li class="has-dropdown">
+        <a href="#generales">Generales
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </a>
+        <div class="mega-menu">
+          <div class="mega-menu-column"><div class="mega-menu-title">Pólizas de Hogar</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Empresas y/o Persona Natural</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Educativa</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Transporte de Mercancías</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">RC Profesional</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Pólizas de Copropiedades</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Todo Riesgo Construcción</div></div>
+          <div class="mega-menu-column"><div class="mega-menu-title">Todo Riesgo Montaje</div></div>
+        </div>
+      </li>
+      <li><a href="/comparar/">Comparar</a></li>
+      <li><a href="/aliadas/" style="color:var(--color-accent)">Aliadas</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="badge-ai" onclick="openMili({entry_point:'fab',menu_subcategory:'',menu_category:''})">
+        <span class="pulse-dot"></span>
+        IA 24/7
+      </div>
+      <a href="/contacto/" class="btn-primary">Contacto</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="aliadas-hero">
+  <h1>Nuestras Aseguradoras Aliadas</h1>
+  <p>Trabajamos con las mejores compañías del mercado colombiano para ofrecerte la protección que necesitas, sin costo de asesoría.</p>
+  <div class="aliadas-hero-stats">
+    <div class="aliadas-stat">
+      <div class="aliadas-stat-num" id="statCarriers">—</div>
+      <div class="aliadas-stat-label">Aseguradoras</div>
+    </div>
+    <div class="aliadas-stat">
+      <div class="aliadas-stat-num" id="statProducts">—</div>
+      <div class="aliadas-stat-label">Productos disponibles</div>
+    </div>
+    <div class="aliadas-stat">
+      <div class="aliadas-stat-num" id="statCats">4</div>
+      <div class="aliadas-stat-label">Categorías de seguro</div>
+    </div>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="aliadas-body">
+
+  <div class="section-eyebrow">PORTAFOLIO COMPLETO</div>
+  <h2 class="section-title">Aliadas que respaldan tu tranquilidad</h2>
+
+  <!-- Carriers grid (populated by JS) -->
+  <div class="carriers-grid" id="carriersGrid">
+    <div class="skeleton-card" style="height:160px"></div>
+    <div class="skeleton-card" style="height:160px"></div>
+    <div class="skeleton-card" style="height:160px"></div>
+    <div class="skeleton-card" style="height:160px"></div>
+    <div class="skeleton-card" style="height:160px"></div>
+    <div class="skeleton-card" style="height:160px"></div>
+  </div>
+
+  <!-- Trust section -->
+  <div class="trust-section scroll-reveal">
+    <h2>¿Por qué elegir M&L como tu corredor?</h2>
+    <p>Somos corredores independientes: trabajamos para ti, no para las aseguradoras. Accedes al mercado completo con un solo asesor.</p>
+    <div class="trust-grid">
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="trust-item-label">Sin conflicto de interés</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="trust-item-label">Asesoría sin costo</div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="trust-item-label">Atención de siniestros</div>
+      </div>
+    </div>
+    <a href="https://wa.me/57XXXXXXXXXX?text=Hola%2C%20quiero%20m%C3%A1s%20informaci%C3%B3n%20sobre%20sus%20aseguradoras%20aliadas"
+       target="_blank" rel="noopener" class="btn-whatsapp">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      Hablar con un asesor
+    </a>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-main">
+    <div>
+      <img src="../Logo_Leon_V2_transparente.png" alt="M&L Seguros" class="footer-logo">
+      <p class="footer-info">Consultores de Seguros · Bogotá, Colombia<br>NIT: 901331365-1</p>
+      <div class="social-icons">
+        <a href="#" class="social-icon" aria-label="Facebook">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="#" class="social-icon" aria-label="LinkedIn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="#" class="social-icon" aria-label="Instagram">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-column-label">NAVEGACIÓN</div>
+      <ul class="footer-links">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/individual/">Vida</a></li>
+        <li><a href="/vehiculos-particulares/">Autos</a></li>
+        <li><a href="/entidades-estatales/">Cumplimiento</a></li>
+        <li><a href="/polizas-de-hogar/">Generales</a></li>
+        <li><a href="/comparar/">Comparar</a></li>
+        <li><a href="/aliadas/">Aliadas</a></li>
+        <li><a href="/contacto/">Contacto</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-column-label">CONTACTO</div>
+      <div class="footer-contact-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        <span>+57 xxx xxx xxxx</span>
+      </div>
+      <div class="footer-contact-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C2185B" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <span>info@consultoresmyl.com</span>
+      </div>
+      <div class="footer-contact-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span>Bogotá, Colombia</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copyright">© 2025 Consultores de Seguros M&L — Todos los derechos reservados</div>
+    <div class="footer-mili-status"><span class="pulse-dot"></span>Mili IA disponible 24/7</div>
+  </div>
+</footer>
+
+<!-- FAB MILI -->
+<button class="mili-fab-floating" onclick="openMili({entry_point:'fab',menu_subcategory:'',menu_category:''})">
+  <div class="mili-fab-avatar-wrapper">
+    <div class="mili-fab-avatar">M</div>
+    <div class="mili-fab-status-dot"></div>
+  </div>
+  <div class="mili-fab-content">
+    <p class="mili-fab-title">Hablar con Mili</p>
+    <p class="mili-fab-subtitle">● Respuesta inmediata</p>
+  </div>
+</button>
+
+<!-- MILI CHAT -->
+<div id="miliWindow" style="display:none" class="mili-window">
+  <div class="mili-chat">
+    <div class="mili-header">
+      <div class="mili-header-avatar">M</div>
+      <div class="mili-header-info">
+        <p class="mili-header-name">Mili · Asesora M&L</p>
+        <p class="mili-header-status"><span class="pulse-dot" style="width:6px;height:6px"></span>En línea · Responde en segundos</p>
+      </div>
+      <button class="mili-close-btn" onclick="closeMili()">✕</button>
+    </div>
+    <div class="mili-messages" id="miliMessages"></div>
+    <div class="quick-chips" id="miliQuickChips"></div>
+    <div class="mili-input-area">
+      <input type="text" id="miliInput" placeholder="Escribe tu pregunta..." autocomplete="off">
+      <button id="miliSendBtn">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+    <div class="mili-footer-note">
+      <button onclick="resetMili()" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:12px">↺ Nueva conversación</button>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="../js/sheets-client.js"></script>
+<script src="../js/gobernanza-data.js"></script>
+<script src="../js/mili-chat.js"></script>
+<script>
+async function loadAliadas() {
+  try {
+    const [carriers, products] = await Promise.all([
+      window.sheetsClient.getCarriers(),
+      window.sheetsClient.getProducts({ is_active: '1' })
+    ]);
+
+    const activeCarriers = carriers.filter(c => c.is_active === '1' || c.is_active === 1 || !c.is_active);
+
+    // Build map of carrier → categories used
+    const carrierMeta = {};
+    products.forEach(p => {
+      if (!carrierMeta[p.carrier_name]) {
+        carrierMeta[p.carrier_name] = { count: 0, cats: new Set() };
+      }
+      carrierMeta[p.carrier_name].count++;
+      if (p.menu_category) carrierMeta[p.carrier_name].cats.add(p.menu_category.toUpperCase());
+    });
+
+    // Update hero stats
+    document.getElementById('statCarriers').textContent = activeCarriers.length;
+    document.getElementById('statProducts').textContent = products.length;
+
+    // Render grid
+    const grid = document.getElementById('carriersGrid');
+    grid.innerHTML = activeCarriers.map(c => {
+      const meta = carrierMeta[c.carrier_name] || { count: 0, cats: new Set() };
+      const logoSrc = c.logo_filename ? `../logos/${c.logo_filename}` : '';
+      const cats = [...meta.cats];
+      return `
+        <div class="carrier-card scroll-reveal">
+          <div class="carrier-logo-wrap">
+            ${logoSrc
+              ? `<img src="${logoSrc}" alt="${c.carrier_name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+              : ''}
+            <div class="carrier-logo-placeholder" ${logoSrc ? 'style="display:none"' : ''}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            </div>
+          </div>
+          <div class="carrier-name">${c.carrier_name}</div>
+          ${meta.count > 0 ? `<div class="carrier-products-count">${meta.count} producto${meta.count !== 1 ? 's' : ''}</div>` : ''}
+          ${cats.length ? `<div class="carrier-categories">${cats.map(cat => `<span class="cat-badge cat-${cat}">${cat}</span>`).join('')}</div>` : ''}
+        </div>`;
+    }).join('');
+
+    // Trigger scroll reveal
+    initScrollReveal();
+
+  } catch(e) {
+    console.error('[Aliadas]', e);
+    document.getElementById('carriersGrid').innerHTML =
+      '<p style="color:var(--text-muted);grid-column:1/-1;text-align:center">No se pudieron cargar las aliadas. Intenta más tarde.</p>';
+  }
+}
+
+function initScrollReveal() {
+  const els = document.querySelectorAll('.scroll-reveal');
+  if (!els.length) return;
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  els.forEach(el => obs.observe(el));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadAliadas();
+  if (window.lucide) lucide.createIcons();
+});
+</script>
+</body>
+</html>
