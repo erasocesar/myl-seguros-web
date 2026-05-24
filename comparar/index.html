@@ -291,7 +291,7 @@
 <div class="comparar-body">
 
   <!-- Filters -->
-  <div class="filter-bar">
+  <div class="filter-bar" id="filterBarCat">
     <span class="filter-label">Filtrar por:</span>
     <button class="filter-btn active" data-cat="TODOS" onclick="setFilter('TODOS',this)">Todos</button>
     <button class="filter-btn" data-cat="VIDA"         onclick="setFilter('VIDA',this)">Vida</button>
@@ -299,6 +299,8 @@
     <button class="filter-btn" data-cat="CUMPLIMIENTO" onclick="setFilter('CUMPLIMIENTO',this)">Cumplimiento</button>
     <button class="filter-btn" data-cat="GENERALES"    onclick="setFilter('GENERALES',this)">Generales</button>
   </div>
+  <div class="filter-bar" id="filterBarSubcat" style="display:none"></div>
+  <div class="filter-bar" id="filterBarType" style="display:none"></div>
 
   <!-- Selection hint -->
   <p class="selection-hint" id="selectionHint">Filtra por categoría y selecciona <strong>2 o 3 soluciones similares</strong> para comparar.</p>
@@ -412,6 +414,8 @@
 let allProducts = [];
 let selectedIds = [];
 let currentFilter = 'TODOS';
+let currentSubcat = null;
+let currentProductType = null;
 
 async function loadProducts() {
   try {
@@ -419,6 +423,7 @@ async function loadProducts() {
     // Only show products with show_in_comparator = 1 (or all if field absent)
     allProducts = products.filter(p => !p.show_in_comparator || p.show_in_comparator === '1' || p.show_in_comparator === 1);
     renderProductGrid();
+    updateHint();
   } catch(e) {
     console.error('[Comparar]', e);
     document.getElementById('productSelectGrid').innerHTML =
@@ -428,15 +433,73 @@ async function loadProducts() {
 
 function setFilter(cat, btn) {
   currentFilter = cat;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  currentSubcat = null;
+  currentProductType = null;
+  document.querySelectorAll('#filterBarCat .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderSubcatBar();
+  renderTypeBar();
+  renderProductGrid();
+  updateHint();
+}
+
+function setSubcat(btn) {
+  const subcat = btn.dataset.subcat;
+  currentSubcat = subcat === 'TODAS' ? null : subcat;
+  currentProductType = null;
+  document.querySelectorAll('#filterBarSubcat .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderTypeBar();
+  renderProductGrid();
+  updateHint();
+}
+
+function setProductType(btn) {
+  const type = btn.dataset.type;
+  currentProductType = type === 'TODOS' ? null : type;
+  document.querySelectorAll('#filterBarType .filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   renderProductGrid();
+  updateHint();
+}
+
+function renderSubcatBar() {
+  const bar = document.getElementById('filterBarSubcat');
+  if (currentFilter === 'TODOS') { bar.style.display = 'none'; return; }
+  const subcats = SUBCATEGORY_MAP.filter(s => s.category === currentFilter);
+  bar.innerHTML = '<span class="filter-label">Subcategoría:</span>'
+    + '<button class="filter-btn active" data-subcat="TODAS" onclick="setSubcat(this)">Todas</button>'
+    + subcats.map(s =>
+        `<button class="filter-btn" data-subcat="${s.name}" onclick="setSubcat(this)">${s.name}</button>`
+      ).join('');
+  bar.style.display = 'flex';
+}
+
+function renderTypeBar() {
+  const bar = document.getElementById('filterBarType');
+  if (!currentSubcat) { bar.style.display = 'none'; return; }
+  const types = [...new Set(
+    allProducts
+      .filter(p => (p.menu_category || '').toUpperCase() === currentFilter
+               && p.menu_subcategory === currentSubcat
+               && p.product_type)
+      .map(p => p.product_type)
+  )].sort();
+  if (!types.length) { bar.style.display = 'none'; return; }
+  bar.innerHTML = '<span class="filter-label">Tipo:</span>'
+    + '<button class="filter-btn active" data-type="TODOS" onclick="setProductType(this)">Todos</button>'
+    + types.map(t =>
+        `<button class="filter-btn" data-type="${t}" onclick="setProductType(this)">${t}</button>`
+      ).join('');
+  bar.style.display = 'flex';
 }
 
 function renderProductGrid() {
-  const filtered = currentFilter === 'TODOS'
+  let filtered = currentFilter === 'TODOS'
     ? allProducts
     : allProducts.filter(p => (p.menu_category || '').toUpperCase() === currentFilter);
+  if (currentSubcat)      filtered = filtered.filter(p => p.menu_subcategory === currentSubcat);
+  if (currentProductType) filtered = filtered.filter(p => p.product_type === currentProductType);
 
   const grid = document.getElementById('productSelectGrid');
   if (!filtered.length) {
@@ -475,14 +538,23 @@ function toggleSelect(id) {
   updateUI();
 }
 
+function updateHint() {
+  const n = selectedIds.length;
+  let hint;
+  if (n >= 2)                  hint = `<strong>${n} seleccionados</strong> — listo para comparar.`;
+  else if (n === 1)            hint = `<strong>${n} seleccionado</strong> — elige 1 o 2 más de la misma categoría.`;
+  else if (currentProductType) hint = 'Selecciona <strong>2 o 3 pólizas comparables</strong>.';
+  else if (currentSubcat)      hint = 'Ahora selecciona el tipo de producto.';
+  else if (currentFilter !== 'TODOS') hint = 'Ahora filtra por subcategoría para refinar la comparación.';
+  else                         hint = 'Selecciona una categoría para comparar soluciones similares.';
+  document.getElementById('selectionHint').innerHTML = hint;
+}
+
 function updateUI() {
   renderProductGrid();
   const n = selectedIds.length;
   document.getElementById('selCount').textContent = n;
-  document.getElementById('selectionHint').innerHTML =
-    n === 0 ? 'Filtra por categoría y selecciona <strong>2 o 3 soluciones similares</strong> para comparar.'
-    : n === 1 ? `<strong>${n} seleccionado</strong> — elige 1 o 2 más de la misma categoría.`
-    : `<strong>${n} seleccionados</strong> — listo para comparar.`;
+  updateHint();
   document.getElementById('compareBtn').disabled = n < 2;
   document.getElementById('compareCTABar').style.display = n > 0 ? 'flex' : 'none';
   document.getElementById('comparisonTableWrap').style.display = 'none';
