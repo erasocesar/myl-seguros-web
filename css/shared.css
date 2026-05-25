@@ -1444,6 +1444,10 @@ transition: all 0.25s ease;
   .cat-overview .container { flex-direction: column; gap: 12px; }
 }
 
+@media (max-width: 480px) {
+  .cat-trust-grid { grid-template-columns: 1fr; }
+}
+
 /* ══════════════════════════════════════════════════════
    MOBILE NAV DRAWER
    ══════════════════════════════════════════════════════ */
