@@ -28,9 +28,17 @@
       background-size: cover;
       background-position: center center;
       background-repeat: no-repeat;
+      min-height: 460px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       padding: 80px var(--section-padding-x) 60px;
       text-align: center;
       color: var(--text-on-dark);
+    }
+    @media (max-width: 768px) {
+      .aliadas-hero { min-height: 380px; padding: 60px var(--section-padding-x) 48px; }
     }
     .aliadas-hero h1  { font-size: clamp(28px,4vw,44px); font-weight: 800; margin: 0 0 12px; }
     .aliadas-hero p   { font-size: 16px; opacity: .75; max-width: 560px; margin: 0 auto 28px; }
@@ -259,15 +267,15 @@
   <div class="aliadas-hero-stats">
     <div class="aliadas-stat">
       <div class="aliadas-stat-num" id="statCarriers">—</div>
-      <div class="aliadas-stat-label">Aseguradoras</div>
+      <div class="aliadas-stat-label">aliados estratégicos</div>
     </div>
     <div class="aliadas-stat">
       <div class="aliadas-stat-num" id="statProducts">—</div>
-      <div class="aliadas-stat-label">Productos disponibles</div>
+      <div class="aliadas-stat-label">soluciones disponibles</div>
     </div>
     <div class="aliadas-stat">
       <div class="aliadas-stat-num" id="statCats">4</div>
-      <div class="aliadas-stat-label">Categorías de seguro</div>
+      <div class="aliadas-stat-label">categorías principales</div>
     </div>
   </div>
 </div>
