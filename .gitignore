@@ -9,7 +9,9 @@ test-results/
 qa-screenshots/
 qa-screenshots-full/
 .claude/
-uploads/
+uploads/*
+!uploads/aliados_confianza_v3.png
 *.mp4
+!Video_Banner2_sin_audio.mp4
 *_BACKUP_*.js
 Scripts/clausulado-*
