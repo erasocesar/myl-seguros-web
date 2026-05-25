@@ -1,784 +1,305 @@
 # SESSION HANDOFF — MYL Seguros Web
-**Date:** 2026-05-23  
-**Status:** Visual asset generation complete. Site fully functional locally.
+
+**Date:** 2026-05-25
+**Status:** Mobile responsiveness milestone complete. All 6 routes pass QA at 320 / 375 / 390 / 414 / 768 / 1440 px. Final QA: 323 PASS / 0 FAIL.
 
 ---
 
-## 1. Architecture Implemented
+## 1. Project Overview
 
-### Stack
-- **Frontend:** Pure static HTML/CSS/JS — no build step, no framework
-- **Pages:** 27 insurance subpages (`{slug}/index.html`) + 3 special pages (`comparar/`, `aliadas/`, `contacto/`) + `index.html` home
-- **Data source:** Google Sheets (runtime CSV fetch via `gviz/tq` API)
-  - Sheet ID: `1YivNd2BoXqwbSrrDEJNmT7ACJ1Z4RTz4YhTTqcgPhbQ`
-- **Local dev server:** `npx serve . -p 3000` (or whichever port is free — fell back to 52498 this session)
+### Project
+**MYL Seguros Web** — marketing and lead-generation website for M&L Seguros, a Colombian insurance broker. The site presents insurance product lines, lets visitors compare options, and routes inquiries to the broker via a contact form backed by Google Apps Script.
 
-### Key Files
-| File | Purpose |
-|---|---|
-| `js/subpage-renderer.js` | Fetches Sheets data, renders product cards, logo chips, modals, hero banner |
-| `js/gobernanza-data.js` | Static governance config: 27 subcategory entries with banner paths, banner copy, product_types, Mili chips |
-| `js/mili-chat.js` | Mili AI chat UI — sends messages to `/api/mili` proxy |
-| `css/shared.css` | Site-wide styles |
-| `assets/banners/` | 27 hero banner PNGs (1536×1024) |
-| `assets/cards/` | 52 product card PNGs (1024×1024) |
-| `logos/` | Carrier logo files (copied from `uploads/`) |
+### Architecture
+Pure static HTML/CSS/JS. No build step, no framework, no bundler. Files are served directly; deployment target is a static host (Cloudflare Pages or equivalent). The Mili AI chatbot is the only component with a backend dependency (Cloudflare Worker proxying the Anthropic API — key never exposed in frontend code).
 
-### Rendering Flow
-1. Subpage HTML loads → `subpage-renderer.js` runs
-2. Reads current page slug from URL
-3. Looks up `GOBERNANZA_MAP[subcategoryName]` for static config (banner image, copy, coberturas)
-4. Fetches `gviz/tq` CSV for live product/carrier data from Sheets
-5. Groups products by `product_type` → renders one `product-type-card` per type
-6. Each card: card image via `../assets/cards/{slugify(productType)}.png`, logo chips, modal on chip click
-7. `renderHero(g)` sets `#heroBannerBg` background-image from `g.banner_image`
+### Routing Structure
 
-### Card Image Slug Convention
-```javascript
-function slugify(str) {
-  return str
-    .toLowerCase()
-    .normalize('NFD').replace(/[̀-ͯ]/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
-}
-// "RC Profesional" → "rc-profesional"
-// "Híbridos y/o Eléctricos" → "hibridos-y-o-electricos"
-```
-Card filename = `assets/cards/{slugify(product_type_from_sheets)}.png`
-
----
-
-## 2. Bugs Fixed This Session
-
-| # | Bug | Fix Applied |
+| Route | File | Codepath |
 |---|---|---|
-| 1 | Carrier logos not showing | `normalizeLogoFilename()` strips `logos_` prefix from Sheets `logo_filename` field |
-| 2 | Qualitas badge "2" duplicated | `renderLogoChipsAll()` de-duplicates by `carrier_name` using a `Set` |
-| 3 | "Hablar con Mili" button in product cards | Removed `<button class="btn-mili-card">` from `renderProductCard` |
-| 4 | Modal not opening on chip click | Rewrote chip click handler: `data-carrier` / `data-type` attributes + `handleChipClick(el)` — no more inline JSON serialization |
-| 5 | `aliados_confianza_v3.png` 404 on home | Fixed `src` path to `uploads/aliados_confianza_v3.png`; copied file to root |
-| 6 | Welcome section container too narrow | `.welcome-inner { max-width: 900px }` (was 780px) |
+| `/` | `index.html` | Standalone — all HTML/CSS/JS inline |
+| `/vida/` | `vida/index.html` | Shared layout via `js/shared-layout.js` |
+| `/autos/` | `autos/index.html` | Shared layout via `js/shared-layout.js` |
+| `/cumplimiento/` | `cumplimiento/index.html` | Shared layout via `js/shared-layout.js` |
+| `/generales/` | `generales/index.html` | Shared layout via `js/shared-layout.js` |
+| `/comparar/` | `comparar/index.html` | Inline nav — loads `css/shared.css`, does NOT use `shared-layout.js` |
+| `/contacto/` | `contacto/index.html` | Inline nav — loads `css/shared.css`, does NOT use `shared-layout.js` |
+| `/aliadas/` | `aliadas/index.html` | Inline nav — loads `css/shared.css`, does NOT use `shared-layout.js` |
+| `/[product-slug]/` | `[slug]/index.html` | Generated subpages — use `js/subpage-renderer.js` + `js/category-renderer.js` |
 
----
+### Three Distinct Nav Codepaths
 
-## 3. Image Generation Pipeline
+1. **Home (`index.html`)** — does not load `shared.css`. All CSS is inline in `<style>` tags inside `index.html`. Nav, footer, and mobile drawer are all hand-coded HTML in the same file.
 
-### Model & Format
-- **Model:** `gpt-image-1` (NOT dall-e-3 — does not exist on current API key)
-- **Response format:** `data[0].b64_json` decoded with `Buffer.from(b64, 'base64')` — no URL download step
-- **Banner size:** `1536x1024` (landscape)
-- **Card size:** `1024x1024` (square)
-- **Quality param:** omitted (gpt-image-1 does not accept it)
+2. **Shared-layout pages (vida / autos / cumplimiento / generales)** — load `css/shared.css`. Nav and footer are JS-injected at runtime by `js/shared-layout.js` via `injectLayout()`. The mobile drawer is also injected by this script.
 
-### Scripts
-| Script | Purpose |
+3. **Inline-nav pages (comparar / contacto / aliadas)** — load `css/shared.css` but have their own hand-coded nav HTML in each file. They do NOT use `js/shared-layout.js`. Mobile hamburger, drawer HTML, and toggle JS were added inline to each file during Phase A.
+
+### CSS Architecture
+
+- **`css/shared.css`** — global stylesheet loaded by all pages except `index.html`. Contains nav, footer, mobile drawer, shared component classes (`.subpage-hero`, `.cat-trust-grid`, `.cat-strip`, etc.), and all responsive breakpoints for shared components.
+- **`index.html` inline `<style>`** — home-page-only styles. Includes its own nav, hero, carousel, footer, and mobile drawer CSS. Completely independent of `shared.css`.
+- **Page-specific inline styles** — `comparar/index.html`, `contacto/index.html`, `aliadas/index.html` each have a `<style>` block for their page-specific layout on top of the shared.css base.
+
+### JS Architecture
+
+| File | Role |
 |---|---|
-| `generate-assets-pilot.js` | Original pilot — 3 banners + 3 cards |
-| `generate-assets-full.js` | Full batch — 23 banners + 46 cards, skips existing files |
-
-### Assets Generated
-| Batch | Banners | Cards | Cost |
-|---|---|---|---|
-| Pre-existing | 1 (`vehiculos-particulares`) | 1 (`seguro-de-autos`) | — |
-| Pilot | 3 | 3 | ~$0.30 |
-| Full batch | 23 | 46 | ~$3.22 |
-| Hotfixes | 0 | 2 (`responsabilidad-civil-profesional`, `responsabilidad-civil-hidrocarburos`) | ~$0.04 |
-| **Total** | **27** | **52** | **~$3.56** |
-
-### Hotfix Notes
-- `rc-profesional.png` was generated but Sheets product type is `"Responsabilidad Civil Profesional"` → slug `responsabilidad-civil-profesional`. Fixed by copying the file.
-- `responsabilidad-civil-hidrocarburos.png` was an unlisted product type discovered during QA. Generated fresh.
-
-### Gobernanza Update
-All 27 `banner_image` fields in `gobernanza-data.js` are now populated. Zero nulls remain.  
-Pattern: `'../assets/banners/{page-slug}.png'`
+| `js/shared-layout.js` | Injects nav, footer, Mili shell, and mobile drawer HTML into shared-layout pages. Handles hamburger toggle, drawer open/close, scroll-based nav class. |
+| `js/mili-chat.js` | Mili AI chatbot UI and API interaction. Routes to Cloudflare Worker. **Frozen — do not modify.** |
+| `js/sheets-client.js` | Google Sheets client helper (legacy/unused — verify before touching). |
+| `js/subpage-renderer.js` | Renders product subpages dynamically from JSON data. |
+| `js/category-renderer.js` | Renders category landing pages. |
+| `js/category-meta.js` | Metadata for category pages. |
+| `js/gobernanza-data.js` | Data file for gobernanza content. |
 
 ---
 
-## 4. QA Results (Final Run)
+## 2. Completed Milestone Summary
 
-**Tool:** Playwright (`qa-full.js`) — 1440×900 headless Chromium  
-**Server:** `http://localhost:52498`  
-**Pages tested:** 28 (home + 27 subpages)
+### Phase A — Mobile Navigation Framework
+**Commit:** `b554afa`  
+**Date:** 2026-05-25
 
-### Summary Table
+Implemented a consistent mobile navigation experience across all three nav codepaths:
 
-| Page | Banner | Broken imgs | Shields | Chips | Modal |
-|---|---|---|---|---|---|
-| home | — | ✅ 0 | ✅ | 0 | — |
-| individual | ✅ | ✅ 0 | ✅ | 11 | ✅ |
-| vida-colectiva | ✅ | ✅ 0 | ✅ | 7 | ✅ |
-| ap-accidentes-personales | ✅ | ✅ 0 | ✅ | 4 | ✅ |
-| polizas-de-salud-y-medicina-prepagada | ✅ | ✅ 0 | ⚠️ | 5 | ✅ |
-| mascotas | ✅ | ✅ 0 | ✅ | 3 | ✅ |
-| arl-riesgos-laborales | ✅ | ✅ 0 | ✅ | 4 | ✅ |
-| polizas-de-asistencia-en-viajes-internacionales | ✅ | ✅ 0 | ✅ | 1 | ✅ |
-| exequial | ✅ | ✅ 0 | ✅ | 1 | ✅ |
-| vehiculos-particulares | ✅ | ✅ 0 | ✅ | 9 | ✅ |
-| vehiculos-comerciales | ✅ | ✅ 0 | ✅ | 6 | ✅ |
-| vehiculos-pesados | ✅ | ✅ 0 | ⚠️ | 5 | ✅ |
-| maquinaria-y-equipos-moviles | ✅ | ✅ 0 | ⚠️ | 2 | ✅ |
-| movilidad-personal | ✅ | ✅ 0 | ⚠️ | 6 | ✅ |
-| credito-de-autos-livianos-publicos-y-pesados | ✅ | ✅ 0 | ✅ | 6 | ✅ |
-| polizas-colectivas | ✅ | ✅ 0 | ⚠️ | 2 | ✅ |
-| entidades-estatales | ✅ | ✅ 0 | ✅ | 4 | ✅ |
-| cumplimiento-particular | ✅ | ✅ 0 | ✅ | 4 | ✅ |
-| arrendamiento | ✅ | ✅ 0 | ✅ | 4 | ✅ |
-| judiciales | ✅ | ✅ 0 | ✅ | 1 | ✅ |
-| empresas-o-persona-natural | ✅ | ✅ 0 | ✅ | 15 | ✅ |
-| polizas-de-hogar | ✅ | ✅ 0 | ✅ | 7 | ✅ |
-| polizas-todo-riesgo-construccion | ✅ | ✅ 0 | ✅ | 4 | ✅ |
-| responsabilidad-civil-profesional | ✅ | ✅ 0 | ⚠️ | 3 | ✅ |
-| transporte-de-mercancias | ✅ | ✅ 0 | ✅ | 3 | ✅ |
-| educativa | ✅ | ✅ 0 | ✅ | 2 | ✅ |
-| polizas-de-copropiedades | ✅ | ✅ 0 | ✅ | 1 | ✅ |
-| polizas-todo-riesgo-montaje | ✅ | ✅ 0 | ✅ | 1 | ✅ |
+- **Global mobile drawer** — slide-in panel with logo, nav links grouped by section (Productos / Herramientas), and a Contacto CTA button. Logo uses root-relative path `/Logo_Leon_V2_transparente.png` in all instances.
+- **Hamburger button** — three-bar icon in the navbar, transforms to × when the drawer is open via CSS class `.is-open`. Button has `aria-expanded` updated on toggle.
+- **`js/shared-layout.js` updates** — `buildMobileDrawer()` function added. `injectLayout()` now inserts the drawer HTML and wires up toggle, close-button, tap-outside, and Escape key event listeners. Body scroll is locked (`body.nav-open`) when drawer is open.
+- **Standalone page mobile nav** — `comparar/index.html`, `contacto/index.html`, `aliadas/index.html` each received the same hamburger button HTML inside their inline nav, the full drawer HTML block after `</nav>`, and an inline `<script>` block with the toggle logic (mirroring `shared-layout.js` behavior).
+- **Mili mobile FAB fix** — `#miliSideBtn` repositioned to a bottom-right floating action button on mobile via `!important` CSS rules inside the `@media (max-width: 768px)` block in `index.html`. CSS-only, no JS, no desktop regression.
+- **44px touch target compliance** — `.nav-mobile-toggle` in `shared.css` set to `min-width: 44px; min-height: 44px`. Drawer close button and all drawer links confirmed ≥ 44px.
+- **Desktop regression protection** — `.nav-mobile-overlay` and `.nav-mobile-toggle` set to `display: none` as global base rules, overridden only inside the mobile media query.
 
-**Headline numbers:**
-- Banners: **27/27 ✅**
-- Broken images: **0 ✅**
-- Modal failures: **0 ✅**
-- Pages fully clean: **22/28**
-- Pages with ⚠️ shields (data gap — see §6): **6**
-- Home console error: **1** (Mili proxy 404 — expected)
-
-### Screenshots
-Saved to: `qa-screenshots-full/` — 3 screenshots per page (above-fold, cards, modal)
+**Phase A QA result:** 314 PASS / 9 FAIL (all 9 failures were pre-existing overflow issues on home hero/carousel/footer at 320px — confirmed non-regressions, deferred to Phase B).
 
 ---
 
-## 5. Remaining Known Issues
+### Phase B1 — Home Overflow Cleanup
+**Commit:** `fce98c4`  
+**Date:** 2026-05-25  
+**File modified:** `index.html` only
 
-| Issue | Severity | Blocker? | Notes |
-|---|---|---|---|
-| Mili `/api/mili` proxy returns 404 | Medium | No | Cloudflare Worker not deployed. Chat UI is complete; just needs the worker. |
-| WhatsApp number is placeholder `57XXXXXXXXXX` | Medium | No | Needs real number from client before launch |
-| 6 pages show zero-card shields | Low | No | Sheets data gap, not asset gap (see §6) |
-| `estado.png` card file exists with no matching product type | Low | No | Orphan file from an older dataset — harmless |
-| Home page 1 console 404 | Low | No | Mili proxy — filtered in QA but still fires |
+Root-cause diagnosis of horizontal overflow on the home page at mobile breakpoints identified four distinct issues, all in `index.html`:
+
+- **Footer grid not collapsing** — `.footer-main` and `.footer-bottom` responsive rules existed in `shared.css` but `index.html` does not load `shared.css`. Added matching rules to `index.html`'s `@media (max-width: 768px)` block: `grid-template-columns: 1fr`, `flex-direction: column`, `text-align: center`.
+- **Carousel-nav overflow at 768px** — `.carousel-nav { display: none }` was placed inside the first `@media (max-width: 768px)` block, but the base `.carousel-nav { display: flex }` rule appeared later in source order and overrode it. Fixed by adding a second targeted `@media (max-width: 768px) { .carousel-nav { display: none; } }` block immediately after the base carousel rules.
+- **Mobile drawer visible at 1440px desktop** — `.nav-mobile-overlay { display: none }` was inside the `@media (max-width: 768px)` block, so at 1440px the media query never fires, the overlay div renders as an unstyled block element, and the logo image inside it renders at its natural width (~1666px). Fixed by moving `display: none` for both `.nav-mobile-overlay` and `.nav-mobile-toggle` outside the media query as global base rules.
+- **nav-right badge-ai and btn-primary visible at mobile** — hiding rules for these elements exist in `shared.css` but not in `index.html` (which does not load `shared.css`). Added `.nav-right .badge-ai, .nav-right .btn-primary { display: none }` to `index.html`'s mobile media query.
+
+**Phase B1 QA result:** 320 PASS / 3 FAIL (all 3 failures were pre-existing 34px overflows on vida and autos at 320px, and 13px overflow on comparar at 320px — deferred to Phase B2).
 
 ---
 
-## 6. Data Gaps in Google Sheets
+### Phase B2 — Final Narrow Breakpoint Cleanup
+**Commit:** `777bda9`  
+**Date:** 2026-05-25  
+**Files modified:** `css/shared.css`, `comparar/index.html`
 
-The following 6 subpages have at least one product type defined in `gobernanza-data.js` that returns **no rows from Sheets**. The renderer shows a `renderZeroCard` (shield icon, empty state) for those slots. These will resolve automatically when the Sheets are populated — no code change needed.
+Root-cause diagnosis at 320px using Playwright DOM inspection isolated two independent causes:
 
-| Page | Product types missing from Sheets |
+- **vida & autos overflow (34px each)** — `css/shared.css` `.cat-trust-grid` had `grid-template-columns: repeat(2, 1fr)` at both `@media (max-width: 900px)` and `@media (max-width: 640px)`. No rule collapsed it to a single column below 640px. At 320px with `24px` gap, the second grid item's right edge reached 354px. Fixed by adding `@media (max-width: 480px) { .cat-trust-grid { grid-template-columns: 1fr; } }` to `shared.css` after the 640px block.
+- **comparar overflow (13px)** — `comparar/index.html` inline styles had `@media (max-width: 640px) { .product-select-grid { grid-template-columns: 1fr 1fr; gap: 10px; } }`. At 320px, two columns plus 10px gap overflowed by 13px. Fixed by adding `@media (max-width: 480px) { .product-select-grid { grid-template-columns: 1fr; } }` after the 640px block in `comparar/index.html`.
+
+Both fixes use a `480px` breakpoint to avoid disrupting the 640px two-column layout on mid-size phones.
+
+**Phase B2 QA result: 323 PASS / 0 FAIL.**
+
+---
+
+## 3. Files Modified
+
+| File | Purpose of Modification | Architectural Notes |
+|---|---|---|
+| `css/shared.css` | Phase A: hamburger touch targets, nav hide rules, drawer CSS, footer responsive rules. Phase B2: `cat-trust-grid` single-column at 480px. | Shared by all pages except `index.html`. Changes here affect vida, autos, cumplimiento, generales, comparar, contacto, aliadas simultaneously. |
+| `js/shared-layout.js` | Phase A: added `buildMobileDrawer()`, updated `injectLayout()` to inject drawer and wire hamburger/close/tap-outside/Escape events. | Only affects shared-layout pages (vida / autos / cumplimiento / generales). Home and inline-nav pages are unaffected. |
+| `index.html` | Phase A: hamburger HTML, drawer HTML, mobile toggle JS, Mili FAB mobile repositioning. Phase B1: footer responsive rules, carousel-nav media query fix, global nav-mobile-overlay/toggle base rules, nav-right hide rules. | Standalone — all CSS/JS inline. Does not load `shared.css` or `shared-layout.js`. Any rule that exists in `shared.css` must be duplicated here if needed on the home page. |
+| `comparar/index.html` | Phase A: hamburger HTML, drawer HTML, inline toggle JS. Phase B2: `product-select-grid` single-column at 480px. | Inline-nav page. Loads `shared.css` but not `shared-layout.js`. Mobile drawer JS is duplicated inline. |
+| `contacto/index.html` | Phase A: hamburger HTML, drawer HTML, inline toggle JS. | Inline-nav page. Same pattern as comparar. |
+| `aliadas/index.html` | Phase A: hamburger HTML, drawer HTML, inline toggle JS. | Inline-nav page. Same pattern as comparar. |
+| `qa-mobile-phase-a.js` | Playwright QA script validating mobile nav and overflow across 6 routes × 6 viewports. | Run with `node qa-mobile-phase-a.js`. Requires Playwright and a local server on `http://localhost:8080`. Produces screenshots in `qa-screenshots-phase-a/`. |
+
+---
+
+## 4. QA Methodology
+
+### Tool
+Playwright (Node.js) via `qa-mobile-phase-a.js` at the project root.
+
+### Breakpoints Tested
+
+| Viewport | Device category |
 |---|---|
-| `/polizas-de-salud-y-medicina-prepagada/` | ≥1 of: Pólizas de Salud, Medicina Prepagada |
-| `/vehiculos-pesados/` | ≥1 of: Seguro de Autos Pesados, Camiones, Tractocamiones, Flotas Pesadas |
-| `/maquinaria-y-equipos-moviles/` | ≥1 of: Maquinaria Amarilla, Retroexcavadoras, Bulldozers, Maquinaria de Contratistas |
-| `/movilidad-personal/` | ≥1 of: Motos, Bicicletas, Movilidad Urbana |
-| `/polizas-colectivas/` | ≥1 of: Híbridos y/o Eléctricos, Convencionales, Todo Tipo de Motor |
-| `/responsabilidad-civil-profesional/` | RC Profesional and/or related subtypes |
+| 320px | Smallest supported phone (Galaxy S5, older iPhones) |
+| 375px | iPhone SE / iPhone 12 mini |
+| 390px | iPhone 14 / 15 standard |
+| 414px | iPhone 14 Plus / older Plus models |
+| 768px | iPad portrait / boundary of mobile media query |
+| 1440px | Desktop regression check |
 
-**To fix:** Add rows to the Google Sheet with the matching `product_type` column values (exact string match — `slugify()` is case-sensitive after lowercasing). The correct product type names are in `gobernanza-data.js` under each entry's `product_types` array.
+All mobile viewports used a mobile user agent (`Mozilla/5.0 … Mobile`). Each page was loaded with `networkidle` wait to ensure JS injection (shared-layout.js) completed before measurement.
+
+### PASS Criteria (per route per viewport)
+
+- **No horizontal overflow** — `document.documentElement.scrollWidth <= window.innerWidth`
+- **Hamburger visible** at ≤ 768px — element exists and `getBoundingClientRect().width > 0`
+- **Desktop nav-menu hidden** at ≤ 768px
+- **Drawer opens** on hamburger click — overlay receives `.open` class
+- **Nav links visible** inside open drawer
+- **Close button touch target ≥ 44 × 44px**
+- **Each drawer nav link height ≥ 44px**
+- **Drawer closes** via close button click
+- **Drawer closes** via tap-outside (overlay click)
+- **Hamburger touch target ≥ 44 × 44px**
+- **Mili FAB in lower half** (home only — `bottom > viewport_height / 2`)
+- **Desktop regression** at 1440px: hamburger hidden, desktop nav-menu visible, no overflow
+
+### Overflow Detection Methodology
+
+`scrollWidth` was read on `document.documentElement`. A page passes if `scrollWidth <= window.innerWidth`. The QA script also ran an ancestry-filtered diagnostic (`getBoundingClientRect().right > viewport`) to identify specific offending elements, filtering out elements contained within an `overflow: hidden` ancestor (which affect `getBoundingClientRect` but not actual page `scrollWidth`).
+
+### False Positive Filtering
+
+Elements reported by `getBoundingClientRect().right > viewport` were cross-checked for `overflow: hidden` ancestors. The `.cat-strip` section has `overflow: hidden`, so `.cat-strip-pill` elements that visually clip do not contribute to `document.scrollWidth`. These were excluded from root-cause analysis.
+
+### Desktop Regression Validation
+
+At 1440px, the QA script verified:
+- Hamburger is hidden (`display: none` or not rendered)
+- Desktop `.nav-menu` is visible
+- No horizontal overflow
+
+All three checks passed across all 6 routes on the final run.
+
+### Final QA Result
+
+**323 PASS / 0 FAIL** (commit `777bda9`, 2026-05-25)
 
 ---
 
-## 7. Mili AI Chat Status
+## 5. Known Technical Debt
 
-### What's done
-- Full chat window UI in `index.html` (floating button, slide-up panel, message bubbles, send button)
-- `js/mili-chat.js` sends POST to `/api/mili` with `{ message, context }` and renders the response
-- Per-subcategory quick-chip suggestions wired from `MILI_CHIPS` in `gobernanza-data.js`
-- Graceful fallback UI when proxy is unavailable
+### Duplicated mobile drawer markup
+The mobile drawer HTML block (overlay, drawer panel, logo, nav links, close button, Contacto CTA) is copy-pasted into three files: `comparar/index.html`, `contacto/index.html`, `aliadas/index.html`. If nav links change (add/remove a route), all three files must be updated manually — and in `js/shared-layout.js` too.
 
-### What's missing — Cloudflare Worker
-The worker must:
-1. Accept `POST /api/mili` with JSON body `{ message: string, context: string }`
-2. Call Anthropic API (`claude-haiku-4-5` or similar) with a system prompt scoped to insurance advisory
-3. Return `{ reply: string }`
-4. Store `ANTHROPIC_API_KEY` as a Cloudflare secret — **never expose it in frontend code**
+### Duplicated mobile toggle JS
+The inline `<script>` that wires the hamburger toggle, close button, tap-outside handler, and Escape key is copy-pasted verbatim into comparar, contacto, and aliadas. Any bug fix or behavior change must be applied to all three files and to `shared-layout.js`.
 
-**Security constraint:** The Anthropic API key must live exclusively in the Worker. It must never appear in any frontend JS file.
+### Home page CSS entirely inline
+`index.html` contains approximately 1,500+ lines of inline CSS. Any shared design token change (colors, spacing, font sizes) must be applied both to `shared.css` and separately to `index.html`. This creates a persistent risk of visual inconsistency.
 
-### Deployment steps (when ready)
+### Home page JS entirely inline
+Mobile toggle JS, carousel JS, and other interactive behaviors are embedded in `<script>` blocks inside `index.html`. No module system, no imports.
+
+### Responsive CSS fragmentation
+The mobile breakpoints for shared components are spread across: `shared.css` (for shared-layout pages), `index.html` inline styles (for home), and each inline-nav page's `<style>` block. There is no single source of truth for breakpoint values.
+
+### Opportunity to unify inline-nav pages with shared layout
+`comparar`, `contacto`, and `aliadas` could load `shared-layout.js` and remove their inline nav/footer/drawer markup entirely, eliminating the duplication. This would require restructuring their existing nav HTML to match what `shared-layout.js` injects — a moderate refactor.
+
+### Untracked test files at project root
+`test-contacto.js`, `test-prod.js`, `test-contacto-e2e.js`, `test-prod-e2e.js`, `test-visual-polish.js`, `test-prod-polish.js` are untracked by git. Their purpose overlaps partially with `qa-mobile-phase-a.js` and `qa-full.js`. These should either be committed or deleted to keep the working tree clean.
+
+---
+
+## 6. Recommended Next Priorities
+
+1. **Layout architecture cleanup** — Migrate `comparar`, `contacto`, and `aliadas` to use `shared-layout.js`. This eliminates the three copies of drawer markup and toggle JS, and ensures future nav changes only require editing one file.
+
+2. **Component standardization** — Extract the home page's inline CSS for the nav, footer, and drawer into `shared.css`, then load `shared.css` from `index.html`. This closes the CSS duplication gap and gives the home page access to shared design tokens.
+
+3. **Performance optimization** — Audit image formats and sizes (hero banners, insurer logos, video autoplay). Add `loading="lazy"` to below-fold images. Review render-blocking resources.
+
+4. **Accessibility audit** — Full keyboard navigation pass (focus trapping in mobile drawer, skip-to-content link, ARIA roles on carousel). Verify color contrast ratios across all product category pages.
+
+5. **SEO technical pass** — Verify `<title>`, `<meta description>`, `<h1>` uniqueness across all routes. Add `canonical` tags. Check that generated subpages have unique meta content.
+
+6. **Analytics / conversion instrumentation** — Wire up form submission events, CTA click events, and WhatsApp button clicks to an analytics provider. The contact form already submits to Apps Script — add a GA4 or equivalent event on success.
+
+7. **Visual polish / animation cleanup** — Hero banner transitions, card hover states, and loading states on the comparar filter. Audit for any remaining layout shift (CLS) caused by JS-injected content from `shared-layout.js`.
+
+---
+
+## 7. AI-Assisted Development Workflow
+
+This project is developed using a hybrid human-AI workflow:
+
+**Human (Cesar Eraso)** — product decisions, architecture approvals, scope definition, final commit authorization, visual review, client relationship. All edits require human approval before committing.
+
+**Claude Code** — implementation of approved plans: writing and editing HTML/CSS/JS, creating QA automation scripts, running Playwright diagnostics, identifying root causes, producing diff previews for human review.
+
+**ChatGPT** — architecture review, debugging strategy, QA interpretation, patch validation, and session planning. Used as a second opinion layer before handing implementation tasks to Claude Code.
+
+**Established workflow for future sessions:**
+1. Define scope and constraints in plain language (human).
+2. Claude Code performs root-cause analysis or reads relevant files — no edits yet.
+3. Claude Code produces a diff preview or patch plan.
+4. Human reviews and approves (or adjusts scope).
+5. Claude Code applies approved edits.
+6. Claude Code runs QA and reports failures only.
+7. Human approves commit with exact message; Claude Code commits.
+
+---
+
+## 8. Recovery Instructions
+
+### Run local dev server
+
+From the project root, start any static file server on port 8080. Examples:
+
 ```bash
-# 1. Create worker
-wrangler generate myl-mili-worker
+# Python (available on most systems)
+python -m http.server 8080
 
-# 2. Add secret
-wrangler secret put ANTHROPIC_API_KEY
+# Node (if http-server is installed globally)
+npx http-server -p 8080
 
-# 3. Wire route in wrangler.toml
-# routes = [{ pattern = "yourdomain.com/api/mili", zone_name = "yourdomain.com" }]
-
-# 4. Deploy
-wrangler deploy
+# VS Code Live Server extension
+# Right-click index.html → Open with Live Server (default port 5500 — update QA script port if used)
 ```
 
----
+The QA script expects `http://localhost:8080`.
 
-## 8. Next Implementation Priorities
-
-### Priority 1 — Launch blockers
-1. **Replace WhatsApp placeholder** — find `57XXXXXXXXXX` in all HTML files and replace with real number
-2. **Deploy Cloudflare Worker for Mili** — see §7 above
-3. **Populate Sheets data gaps** — 6 pages with zero-card shields (see §6)
-
-### Priority 2 — Pre-launch quality
-4. **Image compression** — generated PNGs are 1.3–3 MB each; run `sharp` or `squoosh` to produce WebP at ~200–400 KB per image. This will significantly improve LCP scores.
-5. **SEO audit** — verify `<title>`, `<meta description>`, `<og:image>` on all 30 pages
-6. **Canonical URLs** — ensure trailing-slash consistency across all internal links
-7. **robots.txt / sitemap.xml** — not yet present in project root
-
-### Priority 3 — Post-launch
-8. **Analytics** — wire Google Analytics or Cloudflare Web Analytics
-9. **Domain + DNS** — point custom domain, configure Cloudflare SSL
-10. **Sheets → CDN cache** — the `gviz/tq` calls are unauthenticated; consider a nightly cache-bust strategy for stale data
-11. **Multi-product modal polish** — currently shows all products for a carrier; could add filtering by coverage type
-
----
-
-## Quick Reference
+### Run QA script
 
 ```bash
-# Start dev server
-npx serve . -p 3000
-
-# Generate missing assets (skips existing)
-OPENAI_API_KEY="sk-proj-..." node generate-assets-full.js
-
-# Run full QA (requires server running)
-node qa-full.js
-
-# Check for remaining banner_image nulls
-grep -n "banner_image.*null" js/gobernanza-data.js
+# From project root
+node qa-mobile-phase-a.js
 ```
 
-**Google Sheet ID:** `1YivNd2BoXqwbSrrDEJNmT7ACJ1Z4RTz4YhTTqcgPhbQ`  
-**Sheets URL:** `https://docs.google.com/spreadsheets/d/1YivNd2BoXqwbSrrDEJNmT7ACJ1Z4RTz4YhTTqcgPhbQ`
+Requires:
+- Node.js installed
+- Playwright installed (`npm install` in project root, or `npm install playwright`)
+- Local server running on port 8080
+- Chromium browser available to Playwright (`npx playwright install chromium` if needed)
 
----
-## 9. Session Update — 2026-05-24
+Screenshots are written to `qa-screenshots-phase-a/` at the project root.
 
-### Carrier Strip Improvements
+### Verify before new work
 
-#### Bug Fix — Missing Insurer Logos
+Before starting any new feature or fix:
 
-Root cause:
-`renderCarriersStrip()` only depended on `logoMap[name]`, causing missing insurer logos when carrier names did not exactly match the logo map keys.
+1. Run `node qa-mobile-phase-a.js` — confirm 323 PASS / 0 FAIL baseline.
+2. Run `git status` — confirm working tree is clean except known untracked test files.
+3. Read the relevant codepath section in this document (§1) to determine which files will be affected.
 
-Fix applied:
-Added fallback to product-level logo filenames:
+### Continue from current stable baseline
 
-```javascript
-normalizeLogoFilename(
-  logoMap[name] ||
-  product?.logo_filename ||
-  ''
-)
-```
+The current stable commit is `777bda9` on branch `main`.
 
-Also corrected subpage logo asset paths to:
-
-```text
-/logos/{filename}
-```
-
----
-
-#### UX Upgrade
-
-Enhanced insurer strip interaction across all subpages.
-
-Implemented:
-
-* full-color logos (removed grayscale default)
-* hover elevation
-* hover scale animation
-* pointer cursor
-* improved visual affordance
-
----
-
-#### Insurer Click Interaction
-
-Added:
-
-```javascript
-handleCarrierStripClick(el)
-```
-
-Behavior:
-
-* clicking an insurer logo opens filtered modal content for that insurer within the current subcategory
-* single product → policy detail modal
-* multiple products → filtered multi-product modal
-
----
-
-#### Dynamic Messaging
-
-Headline now dynamically renders:
-
-```text
-Explora también las pólizas disponibles por empresa para {CATEGORY} > {SUBCATEGORY}
-```
-
-Supporting subcopy:
-
-```text
-Haz clic en una aseguradora para ver sus productos disponibles.
-```
-
----
-
-#### Product Count Badges
-
-Added insurer-level product count badges.
-
-Logic:
-
-```javascript
-products.filter(p => p.carrier_name === name).length
-```
-
-Badge overlays on each insurer logo.
-
----
-
-### Cards Section UX Improvement
-
-Kept existing contextual eyebrow:
-
-```text
-{CATEGORY} · {SUBCATEGORY}
-```
-
-Replaced previous generic headline:
-
-```text
-Elige tu aseguradora ideal
-```
-
-With centralized contextual messaging:
-
-Default:
-
-```text
-Explora el tipo de protección que necesitas y compara las opciones disponibles.
-```
-
-Credit-related subcategories:
-
-```text
-Explora el tipo de crédito que necesitas y compara las opciones disponibles.
-```
-
-Detection logic:
-
-```javascript
-/credito|leasing|cartera/i.test(currentSlug)
-```
-
-Implementation notes:
-
-* centralized in `js/subpage-renderer.js`
-* no HTML files modified
-* layout preserved
-* responsive behavior preserved
-
----
-
-### Clausulado Discovery Experiment
-
-Attempted automated discovery of clausulado URLs from insurer websites using sitemap crawling and Google Sheets product data.
-
-Experimental scripts created:
-
-```text
-Scripts/clausulado-step1-matrix.js
-Scripts/clausulado-step2-discovery-v2.js
-```
-
-Outcome:
-Automated discovery produced noisy low-quality matches because insurer websites expose inconsistent document structures, generic legal pages, and non-standard document repositories.
-
-Decision:
-Manual / hybrid clausulado URL population is preferred over automated crawling for accuracy and better ROI.
-
----
-
-### Files Changed
-
-```text
-js/subpage-renderer.js
-```
-
-### Experimental Artifacts
-
-```text
-Scripts/clausulado-step1-matrix.js
-Scripts/clausulado-step2-discovery-v2.js
-```
-
----
-
-## Session Update — 2026-05-24 (Category Landing Pages Phase 1)
-
-### Context
-
-Implemented architectural expansion based on:
-
-`docs/03_GOBERNANZA.md`
-
-New governance chapter:
-
-`11. CATEGORY LANDING PAGE GOVERNANCE (v2.1)`
-
-Official hierarchy:
-
-HOME
-→ CATEGORY LANDING PAGE
-→ SUBCATEGORY PAGE
-→ PRODUCT TYPE
-→ PRODUCT DETAIL / MODAL
-
----
-
-### Completed Today
-
-#### 1. Navbar bug fix
-
-Issue:
-Header mega-menu subcategory links worked only after returning to home.
-
-Root cause:
-Comparar / Aliadas / Contacto lacked mega-menu click wiring.
-
-Fix:
-Centralized navbar mega-menu wiring in:
-
-```text
-js/gobernanza-data.js
-```
-
-Implemented:
-
-* `.mega-menu-title` click routing via `SLUG_MAP`
-* category route entries:
-
-```javascript
-SLUG_MAP['Vida'] = '/vida/';
-SLUG_MAP['Autos'] = '/autos/';
-SLUG_MAP['Cumplimiento'] = '/cumplimiento/';
-SLUG_MAP['Generales'] = '/generales/';
-```
-
-Also rewired navbar category anchors:
-
-```text
-#vida → /vida/
-#autos → /autos/
-#cumplimiento → /cumplimiento/
-#generales → /generales/
-```
-
-Status:
-DONE
-
----
-
-#### 2. Cards section messaging UX improvement
-
-Updated:
-
-```text
-Elige tu aseguradora ideal
-```
-
-Replaced with dynamic centralized logic:
-
-Default:
-
-```text
-Explora el tipo de protección que necesitas y compara las opciones disponibles.
-```
-
-Credit-related subcategories:
-
-```text
-Explora el tipo de crédito que necesitas y compara las opciones disponibles.
-```
-
-Detection:
-
-```javascript
-/credito|leasing|cartera/i.test(currentSlug)
-```
-
-File:
-
-```text
-js/subpage-renderer.js
-```
-
-Status:
-DONE
-
----
-
-#### 3. Category Landing Pages architecture design approved
-
-Governance updated successfully.
-
-File:
-
-```text
-docs/03_GOBERNANZA.md
-```
-
-Added:
-
-```text
-Chapter 11 — CATEGORY LANDING PAGE GOVERNANCE (v2.1)
-```
-
----
-
-### Architecture decisions approved
-
-#### Shared renderer architecture
-
-Approved files:
-
-```text
-js/category-meta.js
-js/category-renderer.js
-js/shared-layout.js
-```
-
-Category routes:
-
-```text
-/vida/
-/autos/
-/cumplimiento/
-/generales/
-```
-
-Architecture principle:
-
-* NO duplicated full page HTML
-* NO 4 cloned pages
-* shared layout injection
-* shared renderer
-* shared metadata
-* backward compatible
-
----
-
-#### category-meta.js approved scope
-
-Allowed:
-
-* slug
-* banner_image
-* icon
-* theme_class
-* eyebrow
-* headline
-* subcopy
-* short_pitch
-* CTA routing
-
-NOT allowed:
-
-* long governance strategic definitions duplicated from docs
-
----
-
-#### category-renderer.js approved architecture
-
-Approved behavior:
-
-* single `window.sheetsClient.getProducts()` fetch
-* local aggregation only
-* dynamic counts:
-
-  * product count
-  * insurer count
-  * subcategory count
-* dynamic rendering:
-
-  * hero
-  * overview
-  * subcategory showcase
-  * trust section
-  * CTA dark
-* uses:
-
-  * `SUBCATEGORY_MAP`
-  * `GOBERNANZA_MAP`
-  * `CATEGORY_META`
-
----
-
-#### shared-layout.js approved architecture
-
-Critical corrections made:
-
-DO:
-
-* derive mega-menu dynamically from `SUBCATEGORY_MAP`
-* reuse existing Mili invocation contract
-* inject shared navbar
-* inject shared footer
-* inject shared Mili shell
-* inject floating FAB
-* keep reusable architecture
-
-DO NOT:
-
-* hardcode mega-menu taxonomy
-* invent new Mili API
-* create 4 duplicated navbars/footers
-
----
-
-### Implementation completed — 2026-05-24 (Session 3)
-
-All pending items from the previous session crash were completed.
-
----
-
-#### 4. `js/shared-layout.js` — Created and validated
-
-Injects navbar, footer, and Mili shell for all category pages.
-
-Architecture:
-- IIFE pattern (no global scope pollution)
-- Derives mega-menu columns dynamically from `SUBCATEGORY_MAP` at runtime — no hardcoded taxonomy
-- Guards double-injection (`if (document.getElementById('navbar')) return`)
-- Logo path: root-relative `/Logo_Leon_V2_transparente.png`
-- Footer: 3-column layout — branding + social / NAVEGACIÓN / CONTACTO
-- Mili shell: FAB + slide-up window (delegates behavior to `mili-chat.js`)
-
-Script load order (all category shells):
-```text
-sheets-client.js → gobernanza-data.js → category-meta.js →
-shared-layout.js → mili-chat.js → category-renderer.js → inline init
-```
-
-Syntax validation:
 ```bash
-node --check "js/shared-layout.js"  # no output = pass
+git log --oneline -5
+# 777bda9 Phase B2: eliminate final 320px overflow regressions
+# fce98c4 Phase B1: home mobile overflow fixes + nav stabilization
+# b554afa Phase A: mobile navigation + global mobile framework
+# 4d087f5 Visual polish: hero height consistency + aliadas stats copy
+# 52c3de3 Wire Apps Script URL into contact form
 ```
 
-Status: **DONE**
+All three nav codepaths are fully responsive. The next logical work is the layout architecture cleanup described in §6.
 
----
+### Key credentials and endpoints (do not expose publicly)
 
-#### 5. 4 category landing pages created
-
-```text
-vida/index.html
-autos/index.html
-cumplimiento/index.html
-generales/index.html
-```
-
-Architecture:
-- Minimal shell only — no duplicated navbar/footer/Mili markup
-- Each page differs only by: `<meta name="category">`, `<title>`, `<meta name="description">`, and `initCategoryPage('<slug>')`
-- All layout injected at runtime by `shared-layout.js`
-- All content rendered at runtime by `category-renderer.js`
-
-Status: **DONE**
-
----
-
-#### 6. Banner images populated
-
-Source images (`images/Vida.png`, `Autos.png`, `Cumplimiento.png`, `Generales.png`) — existing homepage category visuals — copied into:
-
-```text
-assets/banners/vida.png
-assets/banners/autos.png
-assets/banners/cumplimiento.png
-assets/banners/generales.png
-```
-
-No renderer or `category-meta.js` changes required.
-
-Status: **DONE**
-
----
-
-#### 7. Smoke test — PASSED
-
-Tool: Playwright headless Chromium (1440×900)
-Server: `http://localhost:5173`
-
-| Page | Loads | Navbar | Hero | Cards | Footer | Mili FAB | JS Errors | 404s |
-|---|---|---|---|---|---|---|---|---|
-| `/vida/` | ✅ | ✅ | ✅ | 8 | ✅ | ✅ | 0 | 0 |
-| `/autos/` | ✅ | ✅ | ✅ | 7 | ✅ | ✅ | 0 | 0 |
-| `/cumplimiento/` | ✅ | ✅ | ✅ | 4 | ✅ | ✅ | 0 | 0 |
-| `/generales/` | ✅ | ✅ | ✅ | 8 | ✅ | ✅ | 0 | 0 |
-
-Status: **DONE**
-
----
-
-#### 8. Visual QA — `/vida/` at 1440px
-
-| Check | Result | Notes |
-|---|---|---|
-| Navbar alignment | ✅ Pass | Logo, all nav items, IA 24/7 badge, Contacto button — clean |
-| Hero spacing + banner | ✅ Pass | Banner image fills full width; headline and CTA legible |
-| Mega-menu behavior | ⚠️ Unconfirmed | CSS `:hover` only — cannot screenshot headless. DOM structure verified (4 items, 4 menus, columns populated). **Verify in live browser before go-live.** |
-| Subcategory cards | ✅ Pass | 4-column grid at 1440px, live data from Sheets, all fields rendered |
-| Footer layout | ✅ Pass | 3-column layout, contact info, social icons, copyright bar — correct |
-| Mili FAB | ✅ Pass | Fixed position (bottom: 28px, right: 28px, z-index: 900) — no overlap |
-| Mobile (390px) | ⚠️ Pre-existing backlog | See note below |
-
----
-
-#### Mobile nav — Pre-existing backlog item (non-blocker)
-
-At 390px, nav items (Vida, Autos, etc.) are hidden but no hamburger/mobile menu toggle exists in `shared.css`. Mobile users cannot access category navigation.
-
-This is a **pre-existing gap**, not a regression introduced by the category landing page work. It was not present before shared-layout.js because no shared navbar existed for category pages.
-
-Backlog item: Add hamburger toggle + mobile nav drawer to `css/shared.css` and `js/shared-layout.js`.
-
-Not a blocker for desktop demo.
-
----
-
-### Files changed this phase
-
-```text
-js/shared-layout.js         (new)
-js/category-meta.js         (new — created earlier, approved this session)
-js/category-renderer.js     (new — created earlier, approved this session)
-vida/index.html             (new)
-autos/index.html            (new)
-cumplimiento/index.html     (new)
-generales/index.html        (new)
-assets/banners/vida.png     (new — copied from images/Vida.png)
-assets/banners/autos.png    (new — copied from images/Autos.png)
-assets/banners/cumplimiento.png  (new — copied from images/Cumplimiento.png)
-assets/banners/generales.png    (new — copied from images/Generales.png)
-```
-
----
-
-### Updated next priorities
-
-| Priority | Item | Status |
-|---|---|---|
-| 1 | **Git init + GitHub + Vercel deploy** | Next session |
-| 2 | **Mega-menu live browser verification** | Before go-live |
-| 3 | **Mobile nav hamburger** | Post-demo backlog |
-| 4 | Replace WhatsApp placeholder `57XXXXXXXXXX` | Pre-launch |
-| 5 | Deploy Cloudflare Worker for Mili | Pre-launch |
-| 6 | Image compression (PNGs → WebP) | Pre-launch |
-| 7 | SEO audit (title, og:image, canonical) | Pre-launch |
-| 8 | robots.txt / sitemap.xml | Pre-launch |
-
----
+- **Apps Script endpoint** — wired into `contacto/index.html`. Update `NOTIFY_EMAIL` in `docs/contact-form.gs` and redeploy when the client email is confirmed.
+- **WhatsApp number** — `573186517626` is Cesar's personal number. Replace with the client's number before go-live.
+- **Anthropic API key** — lives exclusively in the Cloudflare Worker. Never expose in any frontend JS file.
