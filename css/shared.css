@@ -239,8 +239,9 @@ nav#navbar .container {
 /* Mobile nav toggle */
 .nav-mobile-toggle {
   display: none;
-  flex-direction: column; gap: 5px;
+  flex-direction: column; gap: 5px; align-items: center; justify-content: center;
   background: none; border: none; cursor: pointer; padding: 4px;
+  min-width: 44px; min-height: 44px; flex-shrink: 0;
 }
 .nav-mobile-toggle span {
   display: block; width: 22px; height: 2px;
@@ -1120,10 +1121,26 @@ transition: all 0.25s ease;
 }
 
 @media (max-width: 768px) {
-  .nav-menu, .nav-right .badge-ai { display: none; }
-  .nav-mobile-toggle { display: flex; }
-  .footer-main { grid-template-columns: 1fr; gap: 28px; }
-  .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
+  .nav-menu,
+.nav-right .badge-ai,
+.nav-right .btn-primary {
+  display: none;
+}
+
+.nav-mobile-toggle {
+  display: flex;
+}
+
+.footer-main {
+  grid-template-columns: 1fr;
+  gap: 28px;
+}
+
+.footer-bottom {
+  flex-direction: column;
+  gap: 8px;
+  text-align: center;
+}
   .subpage-hero { min-height: 380px; }
   .hero-h1, .hero-h2 { font-size: clamp(26px, 6vw, 38px); }
   .hero-subtexto { font-size: 15px; }
@@ -1426,3 +1443,105 @@ transition: all 0.25s ease;
   .cat-cta-buttons  { flex-direction: column; align-items: center; }
   .cat-overview .container { flex-direction: column; gap: 12px; }
 }
+
+/* ══════════════════════════════════════════════════════
+   MOBILE NAV DRAWER
+   ══════════════════════════════════════════════════════ */
+.nav-mobile-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(10,10,20,0.75);
+  z-index: 1020;
+  -webkit-tap-highlight-color: transparent;
+}
+.nav-mobile-overlay.open { display: block; }
+
+.nav-mobile-drawer {
+  position: absolute; top: 0; right: 0;
+  width: 280px; max-width: 85vw;
+  height: 100%;
+  background: #1A1A2E;
+  display: flex; flex-direction: column;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  transform: translateX(100%);
+  transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+  z-index: 1030;
+}
+.nav-mobile-overlay.open .nav-mobile-drawer { transform: translateX(0); }
+
+.nav-mobile-header {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  min-height: 64px;
+  flex-shrink: 0;
+}
+.nav-mobile-logo { height: 40px; width: auto; object-fit: contain; }
+
+.nav-mobile-close {
+  background: none; border: none;
+  color: rgba(255,255,255,0.75);
+  font-size: 20px; cursor: pointer;
+  width: 44px; height: 44px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.nav-mobile-close:hover,
+.nav-mobile-close:active { background: rgba(255,255,255,0.1); color: #fff; }
+
+.nav-mobile-links {
+  list-style: none;
+  flex: 1;
+  padding: 8px 0;
+}
+.nav-mobile-links li {
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.nav-mobile-links a {
+  display: flex; align-items: center;
+  padding: 0 24px;
+  min-height: 56px;
+  color: rgba(255,255,255,0.82);
+  text-decoration: none;
+  font-size: 16px; font-weight: 500;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.nav-mobile-links a:hover,
+.nav-mobile-links a:active {
+  background: rgba(194,24,91,0.12);
+  color: #fff;
+}
+.nav-mobile-cat-label {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: #C2185B;
+  padding: 20px 24px 6px;
+  display: block;
+}
+
+.nav-mobile-cta {
+  padding: 20px 24px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  flex-shrink: 0;
+}
+.nav-mobile-cta .btn-primary {
+  width: 100%; justify-content: center;
+  min-height: 48px; font-size: 15px;
+}
+
+/* Hamburger → X animation */
+.nav-mobile-toggle span { transition: all 0.25s ease; }
+.nav-mobile-toggle.is-open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nav-mobile-toggle.is-open span:nth-child(2) { opacity: 0; }
+.nav-mobile-toggle.is-open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Prevent body scroll when mobile nav is open */
+body.nav-open { overflow: hidden; }

@@ -31,10 +31,41 @@
       + '<div class="nav-right">'
       + '<div class="badge-ai" onclick="openMili()"><span class="pulse-dot"></span>IA 24/7</div>'
       + '<a href="/contacto/" class="btn-primary">Contacto</a>'
-      + '</div></div></nav>';
+      + '</div>'
+      + '<button class="nav-mobile-toggle" id="navMobileToggle" aria-label="Abrir menú" aria-expanded="false">'
+      + '<span></span><span></span><span></span>'
+      + '</button>'
+      + '</div></nav>';
   }
 
-  /* §3 SVG_HELPERS */
+  /* §3 MOBILE DRAWER */
+  function buildMobileDrawer() {
+    var links = [
+      { href: '/',             label: 'Inicio' },
+      { href: '/vida/',        label: 'Vida',        cat: true },
+      { href: '/autos/',       label: 'Autos' },
+      { href: '/cumplimiento/', label: 'Cumplimiento' },
+      { href: '/generales/',   label: 'Generales' },
+      { href: '/comparar/',    label: 'Comparar',    sep: true },
+      { href: '/aliadas/',     label: 'Aliadas' },
+    ];
+    var lis = links.map(function (l) {
+      return '<li>'
+        + (l.sep ? '<span class="nav-mobile-cat-label">Herramientas</span>' : '')
+        + '<a href="' + l.href + '">' + l.label + '</a></li>';
+    }).join('');
+    return '<div id="navMobileOverlay" class="nav-mobile-overlay">'
+      + '<div class="nav-mobile-drawer">'
+      + '<div class="nav-mobile-header">'
+      + '<a href="/"><img src="/Logo_Leon_V2_transparente.png" alt="M&amp;L Seguros" class="nav-mobile-logo"></a>'
+      + '<button class="nav-mobile-close" id="navMobileClose" aria-label="Cerrar men&uacute;">&#x2715;</button>'
+      + '</div>'
+      + '<ul class="nav-mobile-links">' + lis + '</ul>'
+      + '<div class="nav-mobile-cta"><a href="/contacto/" class="btn-primary">Contacto</a></div>'
+      + '</div></div>';
+  }
+
+  /* §3b SVG_HELPERS */
   function svgWa()   { return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>'; }
   function svgEm()   { return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C2185B" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>'; }
   function svgPin()  { return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'; }
@@ -106,11 +137,39 @@
     if (document.getElementById('navbar')) { return; }
     document.body.insertAdjacentHTML('afterbegin', buildNavbar());
     document.body.insertAdjacentHTML('beforeend', buildFooter() + buildMiliShell());
-    var nav = document.getElementById('navbar');
+    document.body.insertAdjacentHTML('beforeend', buildMobileDrawer());
+
+    var nav     = document.getElementById('navbar');
+    var toggle  = document.getElementById('navMobileToggle');
+    var overlay = document.getElementById('navMobileOverlay');
+    var closeBtn= document.getElementById('navMobileClose');
+
     window.addEventListener('scroll', function () {
       if (window.pageYOffset > 10) { nav.classList.add('scrolled'); }
       else { nav.classList.remove('scrolled'); }
     }, { passive: true });
+
+    function openMobileNav() {
+      overlay.classList.add('open');
+      document.body.classList.add('nav-open');
+      toggle.classList.add('is-open');
+      toggle.setAttribute('aria-expanded', 'true');
+    }
+    function closeMobileNav() {
+      overlay.classList.remove('open');
+      document.body.classList.remove('nav-open');
+      toggle.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+
+    toggle.addEventListener('click', openMobileNav);
+    closeBtn.addEventListener('click', closeMobileNav);
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) { closeMobileNav(); }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { closeMobileNav(); }
+    });
   }
 
   injectLayout();

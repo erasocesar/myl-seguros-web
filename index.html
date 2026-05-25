@@ -193,7 +193,23 @@
       align-items: center;
       gap: 16px;
     }
-    
+
+    /* Hamburger toggle — hidden on desktop, shown in @media 768px */
+    .nav-mobile-toggle {
+      display: none;
+      flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer;
+      padding: 8px; margin-left: 8px;
+      min-width: 44px; min-height: 44px;
+      align-items: center; justify-content: center;
+    }
+    .nav-mobile-toggle span {
+      display: block; width: 22px; height: 2px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 2px;
+      transition: all 0.25s ease;
+    }
+
     .badge-ai {
       background: rgba(194, 24, 91, 0.12);
       border: 1px solid rgba(194, 24, 91, 0.35);
@@ -1674,7 +1690,7 @@
       .mili-float span {
         display: none;
       }
-      
+
       .mili-float {
         width: 52px;
         height: 52px;
@@ -1682,6 +1698,89 @@
         justify-content: center;
         border-radius: 50%;
       }
+
+      /* Mobile nav toggle — show hamburger */
+      .nav-mobile-toggle { display: flex; }
+
+      /* Mobile nav drawer */
+      .nav-mobile-overlay {
+        display: none;
+        position: fixed; inset: 0;
+        background: rgba(10,10,20,0.75);
+        z-index: 1020;
+      }
+      .nav-mobile-overlay.open { display: block; }
+      .nav-mobile-drawer {
+        position: absolute; top: 0; right: 0;
+        width: 280px; max-width: 85vw;
+        height: 100%; background: #1A1A2E;
+        display: flex; flex-direction: column;
+        overflow-y: auto;
+        transform: translateX(100%);
+        transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+        z-index: 1030;
+      }
+      .nav-mobile-overlay.open .nav-mobile-drawer { transform: translateX(0); }
+      .nav-mobile-header {
+        display: flex; align-items: center;
+        justify-content: space-between;
+        padding: 16px 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        min-height: 64px;
+      }
+      .nav-mobile-logo { height: 40px; width: auto; object-fit: contain; }
+      .nav-mobile-close {
+        background: none; border: none;
+        color: rgba(255,255,255,0.75); font-size: 20px;
+        cursor: pointer; width: 44px; height: 44px;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 8px;
+      }
+      .nav-mobile-links { list-style: none; flex: 1; padding: 8px 0; }
+      .nav-mobile-links li { border-bottom: 1px solid rgba(255,255,255,0.05); }
+      .nav-mobile-links a {
+        display: flex; align-items: center;
+        padding: 0 24px; min-height: 56px;
+        color: rgba(255,255,255,0.82);
+        text-decoration: none; font-size: 16px; font-weight: 500;
+        transition: background 0.15s ease, color 0.15s ease;
+      }
+      .nav-mobile-links a:active { background: rgba(194,24,91,0.12); color: #fff; }
+      .nav-mobile-cat-label {
+        font-size: 10px; font-weight: 700;
+        letter-spacing: 0.1em; text-transform: uppercase;
+        color: #C2185B; padding: 20px 24px 6px; display: block;
+      }
+      .nav-mobile-cta {
+        padding: 20px 24px;
+        border-top: 1px solid rgba(255,255,255,0.08);
+      }
+      .nav-mobile-toggle.is-open span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+      .nav-mobile-toggle.is-open span:nth-child(2) { opacity: 0; }
+      .nav-mobile-toggle.is-open span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
+      body.nav-open { overflow: hidden; }
+
+      /* Mili side button → bottom-right FAB on mobile.
+         !important overrides the inline style="" attributes. */
+      #miliSideBtn {
+        top: auto !important;
+        bottom: 28px !important;
+        right: 28px !important;
+        transform: none !important;
+        border-radius: 50% !important;
+        width: 52px !important;
+        height: 52px !important;
+        padding: 0 !important;
+        justify-content: center !important;
+        border: 1px solid rgba(194,24,91,0.45) !important;
+      }
+      /* Hide the expanded text label — keep only the avatar */
+      #miliSideBtn > div:last-child { display: none !important; }
+
     }
     
     /* Problem/Solution Carousel Section */
@@ -2004,8 +2103,33 @@
         </div>
         <a href="#contacto" class="btn-primary">Contacto</a>
       </div>
+      <button class="nav-mobile-toggle" id="navMobileToggle" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </nav>
+
+  <!-- Mobile Nav Drawer -->
+  <div id="navMobileOverlay" class="nav-mobile-overlay">
+    <div class="nav-mobile-drawer">
+      <div class="nav-mobile-header">
+        <a href="/"><img src="Logo_Leon_V2_transparente.png" alt="M&amp;L Seguros" class="nav-mobile-logo"></a>
+        <button class="nav-mobile-close" id="navMobileClose" aria-label="Cerrar menú">&#x2715;</button>
+      </div>
+      <ul class="nav-mobile-links">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/vida/">Vida</a></li>
+        <li><a href="/autos/">Autos</a></li>
+        <li><a href="/cumplimiento/">Cumplimiento</a></li>
+        <li><a href="/generales/">Generales</a></li>
+        <li><span class="nav-mobile-cat-label">Herramientas</span><a href="/comparar/">Comparar</a></li>
+        <li><a href="/aliadas/">Aliadas</a></li>
+      </ul>
+      <div class="nav-mobile-cta">
+        <a href="/contacto/" class="btn-primary" style="display:flex;justify-content:center;">Contacto</a>
+      </div>
+    </div>
+  </div>
 
   <!-- Hero Section -->
   <section class="hero">
@@ -2497,7 +2621,7 @@
   </footer>
 
   <!-- Floating Mili Button -->
-  <button onclick="openMili()" style="
+  <button id="miliSideBtn" onclick="openMili()" style="
     position:fixed; top:50%; right:0;
     transform:translateY(-50%);
     z-index:900;
@@ -2694,6 +2818,36 @@
       });
       if (window.lucide) lucide.createIcons();
     });
+  </script>
+
+  <script>
+    /* Mobile nav toggle */
+    (function () {
+      var toggle  = document.getElementById('navMobileToggle');
+      var overlay = document.getElementById('navMobileOverlay');
+      var closeBtn = document.getElementById('navMobileClose');
+      if (!toggle || !overlay) return;
+      function openMobileNav() {
+        overlay.classList.add('open');
+        document.body.classList.add('nav-open');
+        toggle.classList.add('is-open');
+        toggle.setAttribute('aria-expanded', 'true');
+      }
+      function closeMobileNav() {
+        overlay.classList.remove('open');
+        document.body.classList.remove('nav-open');
+        toggle.classList.remove('is-open');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+      toggle.addEventListener('click', openMobileNav);
+      closeBtn.addEventListener('click', closeMobileNav);
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) { closeMobileNav(); }
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { closeMobileNav(); }
+      });
+    }());
   </script>
 </body>
 </html>

@@ -256,9 +256,33 @@
         IA 24/7
       </div>
       <a href="/contacto/" class="btn-primary">Contacto</a>
+      <button class="nav-mobile-toggle" id="navMobileToggle" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </div>
 </nav>
+
+<div id="navMobileOverlay" class="nav-mobile-overlay">
+  <div class="nav-mobile-drawer">
+    <div class="nav-mobile-header">
+      <a href="/"><img src="/Logo_Leon_V2_transparente.png" alt="M&amp;L Seguros" class="nav-mobile-logo"></a>
+      <button class="nav-mobile-close" id="navMobileClose" aria-label="Cerrar menú">&#x2715;</button>
+    </div>
+    <ul class="nav-mobile-links">
+      <li><a href="/">Inicio</a></li>
+      <li><a href="/vida/">Vida</a></li>
+      <li><a href="/autos/">Autos</a></li>
+      <li><a href="/cumplimiento/">Cumplimiento</a></li>
+      <li><a href="/generales/">Generales</a></li>
+      <li><span class="nav-mobile-cat-label">Herramientas</span><a href="/comparar/">Comparar</a></li>
+      <li><a href="/aliadas/">Aliadas</a></li>
+    </ul>
+    <div class="nav-mobile-cta">
+      <a href="/contacto/" class="btn-primary" style="display:flex;justify-content:center;">Contacto</a>
+    </div>
+  </div>
+</div>
 
 <!-- HERO -->
 <div class="aliadas-hero">
@@ -526,6 +550,26 @@ document.addEventListener('DOMContentLoaded', () => {
   loadAliadas();
   if (window.lucide) lucide.createIcons();
 });
+</script>
+<script>
+(function () {
+  var toggle  = document.getElementById('navMobileToggle');
+  var overlay = document.getElementById('navMobileOverlay');
+  var closeBtn = document.getElementById('navMobileClose');
+  if (!toggle || !overlay) return;
+  function openMobileNav() {
+    overlay.classList.add('open'); document.body.classList.add('nav-open');
+    toggle.classList.add('is-open'); toggle.setAttribute('aria-expanded', 'true');
+  }
+  function closeMobileNav() {
+    overlay.classList.remove('open'); document.body.classList.remove('nav-open');
+    toggle.classList.remove('is-open'); toggle.setAttribute('aria-expanded', 'false');
+  }
+  toggle.addEventListener('click', openMobileNav);
+  closeBtn.addEventListener('click', closeMobileNav);
+  overlay.addEventListener('click', function(e) { if (e.target === overlay) { closeMobileNav(); } });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeMobileNav(); } });
+}());
 </script>
 </body>
 </html>
