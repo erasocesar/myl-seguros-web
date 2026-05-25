@@ -1602,12 +1602,24 @@
       transform: translateY(0);
     }
     
+    /* Base: hide mobile-only UI at all viewport sizes */
+    .nav-mobile-overlay,
+    .nav-mobile-toggle {
+      display: none;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
-      .nav-menu {
+      .nav-menu,
+      .nav-right .badge-ai,
+      .nav-right .btn-primary {
         display: none;
       }
-      
+
+      .nav-mobile-toggle {
+        display: flex;
+      }
+
       .hero-video {
         width: 100%;
         object-position: center center;
@@ -1699,12 +1711,10 @@
         border-radius: 50%;
       }
 
-      /* Mobile nav toggle — show hamburger */
-      .nav-mobile-toggle { display: flex; }
+
 
       /* Mobile nav drawer */
       .nav-mobile-overlay {
-        display: none;
         position: fixed; inset: 0;
         background: rgba(10,10,20,0.75);
         z-index: 1020;
@@ -1781,8 +1791,20 @@
       /* Hide the expanded text label — keep only the avatar */
       #miliSideBtn > div:last-child { display: none !important; }
 
+      .footer-main {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+      }
+
+
     }
-    
+
     /* Problem/Solution Carousel Section */
     .carousel-section {
       background: #F7F7F7;
@@ -1937,7 +1959,13 @@
     .carousel-nav.next {
       right: -50px;
     }
-    
+
+    @media (max-width: 768px) {
+      .carousel-nav {
+        display: none;
+      }
+    }
+
     .carousel-dots {
       display: flex;
       justify-content: center;
